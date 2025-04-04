@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       id="Shaders" title="Shaders">
+
+
+    <section-starting-page>
+    <title>Shaders</title>
+    <description>
+        Write custom shaders in kool, or use the built-in material shaders.
+    </description>
+
+    <spotlight>
+        <card href="KSL.md" badge="development"/>
+        <card href="Builtin-Shaders.md" badge="tools"/>
+    </spotlight>
+
+    </section-starting-page>
+</topic>
+
+<!--<title>-->
+<!--Shaders-->
+<!--</title>-->
+<!--<p>Shaders (sometimes also called materials) are required to draw objects to the screen (or into a texture).-->
+<!--kool comes with a set of general purpose shaders as well as its own shading language to write custom shaders.</p>-->

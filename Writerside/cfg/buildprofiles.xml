@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE buildprofiles SYSTEM "https://resources.jetbrains.com/writerside/1.0/build-profiles.dtd">
+<buildprofiles xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/build-profiles.xsd"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <build-profile instance="ke">
+        <variables>
+            <noindex-content>false</noindex-content>
+            <download-title>View Demos</download-title>
+            <download-page>https://kool-engine.github.io/live/demo</download-page>
+            <showDownloadButton>true</showDownloadButton>
+        </variables>
+        <footer>
+            <social type="github" href="https://github.com/kool-engine/kool"/>
+        </footer>
+    </build-profile>
+
+</buildprofiles>

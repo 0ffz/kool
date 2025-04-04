@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE instance-profile
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
+
+<instance-profile id="ke"
+                 name="Kool Engine" start-page="Home.topic">
+
+    <toc-element topic="Home.topic"/>
+    <toc-element topic="About.md"/>
+    <toc-element topic="demos.md"/>
+    <toc-element topic="Engine.md">
+        <toc-element topic="Project-Setup.md"/>
+        <toc-element topic="Shaders.topic">
+            <toc-element topic="KSL.md">
+                <toc-element topic="Compute-Shaders.md"/>
+            </toc-element>
+            <toc-element topic="Builtin-Shaders.md">
+                <toc-element topic="Deferred-Shading.md"/>
+            </toc-element>
+        </toc-element>
+        <toc-element topic="Kool-UI.md"/>
+    </toc-element>
+    <toc-element topic="editor.md">
+        <toc-element topic="getting-started.md"/>
+        <toc-element topic="basics.md"/>
+        <toc-element topic="object-settings.md"/>
+        <toc-element topic="custom-code.md"/>
+    </toc-element>
+</instance-profile>
