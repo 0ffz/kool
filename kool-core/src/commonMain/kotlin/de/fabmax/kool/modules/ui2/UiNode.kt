@@ -13,14 +13,14 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.reflect.KClass
 
-abstract class UiNode(val parent: UiNode?, override val surface: UiSurface) : UiScope {
+abstract class UiNode(var parent: UiNode?, override val surface: UiSurface) : UiScope {
     override val uiNode: UiNode get() = this
 
     var nodeIndex = 0
         private set
 
     protected val oldChildren = mutableListOf<UiNode>()
-    protected val mutChildren = mutableListOf<UiNode>()
+    val mutChildren = mutableListOf<UiNode>()
     val children: List<UiNode> get() = mutChildren
     val weakMemory = WeakMemory()
 
@@ -102,7 +102,7 @@ abstract class UiNode(val parent: UiNode?, override val surface: UiSurface) : Ui
         this.topPx = minY
         this.rightPx = maxX
         this.bottomPx = maxY
-
+        val parent = parent
         if (parent != null) {
             clipBoundsPx.x = max(parent.clipLeftPx, minX)
             clipBoundsPx.y = max(parent.clipTopPx, minY)
@@ -176,6 +176,7 @@ abstract class UiNode(val parent: UiNode?, override val surface: UiSurface) : Ui
     open fun render(ctx: KoolContext) {
         modifier.background?.renderUi(this)
         modifier.border?.renderUi(this)
+        modifier.onRender.forEach { render -> render(this) }
     }
 
     open fun measureContentSize(ctx: KoolContext) {

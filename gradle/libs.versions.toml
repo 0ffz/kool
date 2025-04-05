@@ -11,6 +11,7 @@ jsvg = "2.0.0"
 androidsvg = "1.4"
 physxjni = "2.6.0"
 physxjswebidl = "2.6.0-1"
+compose = "1.8.0-beta01"
 
 # wgpu backend
 wgpu4k = "0.1.1"
@@ -60,3 +61,7 @@ plugindep-android-library = { group = "com.android.library", name = "com.android
 lwjgl = ["lwjgl-core", "lwjgl-glfw", "lwjgl-jemalloc", "lwjgl-opengl", "lwjgl-vulkan", "lwjgl-vma", "lwjgl-shaderc", "lwjgl-nfd", "lwjgl-stb"]
 wgpu4k = ["wgpu4k", "webgpu-descriptors"]
 wgpu4k-surface-utils = ["rococoa", "jna", "jna-platform"]
+
+[plugins]
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose" }

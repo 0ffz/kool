@@ -6,6 +6,8 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 plugins {
     id("org.jetbrains.kotlin.multiplatform")
     id("org.jetbrains.kotlin.plugin.serialization")
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.jetbrainsCompose)
 }
 
 kotlin {
@@ -52,6 +54,7 @@ kotlin {
             implementation(libs.kotlin.coroutines)
             implementation(libs.kotlin.serialization.core)
             implementation(libs.kotlin.serialization.json)
+            implementation(compose.runtime)
         }
 
         val desktopMain by getting
