@@ -1,13 +1,13 @@
-package de.fabmax.kool.modules.compose.composables
+package de.fabmax.kool.modules.compose.composables.layout
 
 import androidx.compose.runtime.Composable
 import de.fabmax.kool.modules.compose.Layout
+import de.fabmax.kool.modules.compose.composables.ComposableUiNode
 import de.fabmax.kool.modules.compose.modifiers.Modifier
-import de.fabmax.kool.modules.ui2.BoxNode
 
 @Composable
 fun Box(modifier: Modifier = Modifier.Companion, content: @Composable () -> Unit) {
-    Layout(::BoxNode, modifier) {
+    Layout(::ComposableUiNode, modifier) {
         content()
     }
 }

@@ -1,10 +1,8 @@
 package de.fabmax.kool.modules.compose.animation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import de.fabmax.kool.modules.ui2.AnimatedState
+import de.fabmax.kool.modules.ui2.MutableStateValue
 import de.fabmax.kool.util.RenderLoop
 import de.fabmax.kool.util.Time
 import kotlinx.coroutines.Dispatchers
@@ -19,15 +17,14 @@ fun animateFloatAsState(targetValue: Float): State<Float> {
 
     LaunchedEffect(targetValue) {
         val startValue = animatedValue.value
-        val durationMillis = 1000L // animation duration: 1 second
-
+        val durationMillis = 300L // animation duration: 300 ms
         launch(Dispatchers.RenderLoop) {
-            var startTime = 0f // initial frame time in nanoseconds
+            val startTime = withFrameNanos { it }
             while (true) {
-                // Calculate elapsed time in milliseconds
-                startTime += Time.deltaT * 1000
+                val currentTime = withFrameNanos { it }
+                val elapsedTimeMillis = (currentTime - startTime) / 1_000_000L
                 // Determine progress as a fraction [0f, 1f]
-                val progress = (startTime / durationMillis.toFloat()).coerceIn(0f, 1f)
+                val progress = (elapsedTimeMillis / durationMillis.toFloat()).coerceIn(0f, 1f)
                 // Update the animated value based on progress
                 animatedValue.value = startValue + (targetValue - startValue) * progress
 
@@ -39,4 +36,25 @@ fun animateFloatAsState(targetValue: Float): State<Float> {
     }
 
     return animatedValue
+}
+
+
+@Composable
+fun <T> MutableStateValue<T>.collectAsState(): State<T> {
+    return produceState(this.value) {
+        onChange { old, new -> this.value = new }
+    }
+}
+
+@Suppress("NOTHING_TO_INLINE")
+@Composable
+inline fun <T : Any> LaunchAnimation(animator: AnimatedState<T>) {
+    LaunchedEffect(animator.isActive) {
+        if (animator.isActive) launch(Dispatchers.RenderLoop) {
+            while (animator.isActive) {
+                animator.progress(Time.deltaT)
+                yield()
+            }
+        }
+    }
 }

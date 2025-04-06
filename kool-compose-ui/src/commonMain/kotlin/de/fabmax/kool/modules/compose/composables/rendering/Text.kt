@@ -1,4 +1,4 @@
-package de.fabmax.kool.modules.compose.composables
+package de.fabmax.kool.modules.compose.composables.rendering
 
 import androidx.compose.runtime.Composable
 import de.fabmax.kool.modules.compose.Layout

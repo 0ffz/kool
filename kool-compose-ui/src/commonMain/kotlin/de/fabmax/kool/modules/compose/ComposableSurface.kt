@@ -14,10 +14,10 @@ fun ComposableSurface(
     content: @Composable () -> Unit
 ): Node {
     val surface = UiSurface(colors, sizes, clearOnUpdateUi = false)
-    val owner = UiSurfaceComposition(surface, ctx)
-    owner.start {
+    val composition = UiSurfaceComposition(surface, ctx)
+    composition.start {
         content()
     }
-    surface.onRelease { owner.exit() }
+    surface.onRelease { composition.exit() }
     return surface
 }

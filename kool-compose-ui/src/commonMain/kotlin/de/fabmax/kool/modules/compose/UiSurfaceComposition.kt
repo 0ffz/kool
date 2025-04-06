@@ -7,7 +7,6 @@ import de.fabmax.kool.modules.ui2.UiSurface
 import de.fabmax.kool.util.RenderLoop
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
-import kotlin.time.TimeSource
 
 class UiSurfaceComposition(
     val surface: UiSurface,
@@ -57,12 +56,9 @@ class UiSurfaceComposition(
             while (!exitScheduled) {
                 if (hasFrameWaiters) {
                     hasFrameWaiters = false
-                    //TODO not sure if this is correct (delta vs absolute), the impl this is from uses a JVM specific System.nanoTime()
-                    clock.sendFrame(
-                        TimeSource.Monotonic.markNow().elapsedNow().inWholeNanoseconds
-                    ) // Frame time value is not used by Compose runtime.
                     surface.triggerUpdate()
                 }
+                clock.sendFrame(nanoTime())
                 yield()
             }
             running = false
