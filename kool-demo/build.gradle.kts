@@ -49,6 +49,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":kool-core"))
+            implementation(project(":kool-compose-ui"))
             implementation(project(":kool-backend-wgpu4k"))
             implementation(project(":kool-physics"))
             implementation(libs.kotlin.coroutines)
