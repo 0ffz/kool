@@ -2,15 +2,47 @@ package de.fabmax.kool.modules.compose.composables.toolkit
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import de.fabmax.kool.modules.compose.Layout
+import de.fabmax.kool.modules.compose.LocalColors
 import de.fabmax.kool.modules.compose.LocalSizes
 import de.fabmax.kool.modules.compose.LocalUiSurface
+import de.fabmax.kool.modules.compose.composables.layout.Box
+import de.fabmax.kool.modules.compose.composables.layout.Column
+import de.fabmax.kool.modules.compose.composables.layout.Popup
 import de.fabmax.kool.modules.compose.modifiers.Modifier
-import de.fabmax.kool.modules.compose.modifiers.edit
-import de.fabmax.kool.modules.compose.modifiers.hoverListener
-import de.fabmax.kool.modules.compose.modifiers.onClick
+import de.fabmax.kool.modules.compose.modifiers.background
+import de.fabmax.kool.modules.compose.modifiers.clickable
 import de.fabmax.kool.modules.compose.modifiers.padding
-import de.fabmax.kool.modules.ui2.*
+import de.fabmax.kool.modules.ui2.ComboBoxNode
+import de.fabmax.kool.modules.ui2.PointerEvent
+import de.fabmax.kool.modules.ui2.RoundRectBackground
+import de.fabmax.kool.modules.ui2.dp
+
+@Composable
+fun DropdownMenu(
+    expanded: Boolean,
+    modifier: Modifier = Modifier,
+    onDismissRequest: (PointerEvent) -> Unit = {},
+    content: @Composable () -> Unit,
+) {
+    if (expanded) Popup(
+        relativeToParent = true,
+        onDismissRequest = onDismissRequest,
+        modifier = modifier.background(RoundRectBackground(LocalColors.current.background, 4.dp))
+    ) {
+        Column(modifier) {
+            content()
+        }
+    }
+}
+
+@Composable
+fun DropdownMenuItem(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    text: @Composable () -> Unit,
+) = Box(modifier.padding(LocalSizes.current.smallGap).clickable { onClick() }) {
+    text()
+}
 
 @Composable
 fun ComboBox(

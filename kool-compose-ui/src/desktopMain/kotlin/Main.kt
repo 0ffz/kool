@@ -6,11 +6,8 @@ import de.fabmax.kool.KoolApplication
 import de.fabmax.kool.KoolConfigJvm
 import de.fabmax.kool.addScene
 import de.fabmax.kool.addUiScene
-import de.fabmax.kool.math.Vec2f
 import de.fabmax.kool.math.Vec3f
 import de.fabmax.kool.math.deg
-import de.fabmax.kool.modules.compose.surface.ComposableSurface
-import de.fabmax.kool.modules.compose.composables.layout.Popup
 import de.fabmax.kool.modules.compose.composables.layout.Box
 import de.fabmax.kool.modules.compose.composables.layout.Column
 import de.fabmax.kool.modules.compose.composables.rendering.Text
@@ -19,6 +16,7 @@ import de.fabmax.kool.modules.compose.modifiers.Modifier
 import de.fabmax.kool.modules.compose.modifiers.background
 import de.fabmax.kool.modules.compose.modifiers.dragListener
 import de.fabmax.kool.modules.compose.modifiers.margin
+import de.fabmax.kool.modules.compose.surface.ComposableSurface
 import de.fabmax.kool.modules.ksl.KslPbrShader
 import de.fabmax.kool.modules.ui2.*
 import de.fabmax.kool.scene.addColorMesh
@@ -59,7 +57,7 @@ fun main() {
                 var x by remember { mutableStateOf(0.dp) }
                 var y by remember { mutableStateOf(0.dp) }
                 var buttonText by remember { mutableStateOf(1) }
-                Box(Modifier) {
+                Box {
                     Column(
                         Modifier.margin(x, 0.dp, y, 0.dp)
                             .background(RectBackground(MdColor.GREY))
@@ -80,18 +78,27 @@ fun main() {
                         var value by remember { mutableStateOf(1f) }
                         Slider(value, onValueChange = { value = it }, range = 0f..10f)
 
-                        var selected by remember { mutableStateOf(0) }
-                        val items = listOf("Item 1", "Item 2", "Item 3")
-                        Popup(alignmentX = AlignmentX.Center, alignmentY = AlignmentY.Center) {
-                            Button(onClick = { buttonText++ }) {
-                                Text("Hello centered ${buttonText}")
-                            }
+                        var expanded by remember { mutableStateOf(false) }
+                        Button(onClick = { expanded = !expanded }) {
+                            Text("Show Menu")
                         }
-                        Popup(relativeToParent = true, offset = Vec2f(0f, 10f)) {
-                            Box(Modifier.background(RoundRectBackground(Color.BLACK.withAlpha(0.5f), 4.dp))) {
-                                Text("Following parent")
-                            }
+                        DropdownMenu(expanded, onDismissRequest = { expanded = false }) {
+                            DropdownMenuItem(text = { Text("Item 1") })
+                            DropdownMenuItem(text = { Text("Item 2") })
+                            DropdownMenuItem(text = { Text("Item 3") })
                         }
+//                        var selected by remember { mutableStateOf(0) }
+//                        val items = listOf("Item 1", "Item 2", "Item 3")
+//                        Popup(alignmentX = AlignmentX.Center, alignmentY = AlignmentY.Center) {
+//                            Button(onClick = { buttonText++ }) {
+//                                Text("Hello centered ${buttonText}")
+//                            }
+//                        }
+//                        Popup(relativeToParent = true, offset = Vec2f(0f, 10f)) {
+//                            Box(Modifier.background(RoundRectBackground(Color.BLACK.withAlpha(0.5f), 4.dp))) {
+//                                Text("Following parent")
+//                            }
+//                        }
 //                        ComboBox(selected, items, onItemSelected = { selected = it })
                     }
                 }

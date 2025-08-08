@@ -1,19 +1,13 @@
 package de.fabmax.kool.modules.compose.composables.layout
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import de.fabmax.kool.math.Vec2f
-import de.fabmax.kool.modules.compose.modifiers.Modifier
-import de.fabmax.kool.modules.compose.modifiers.align
-import de.fabmax.kool.modules.compose.modifiers.margin
-import de.fabmax.kool.modules.compose.modifiers.onPositioned
+import de.fabmax.kool.modules.compose.modifiers.*
 import de.fabmax.kool.modules.compose.surface.layers.Content
 import de.fabmax.kool.modules.compose.surface.layers.rememberComposeSceneLayer
 import de.fabmax.kool.modules.ui2.AlignmentX
 import de.fabmax.kool.modules.ui2.AlignmentY
+import de.fabmax.kool.modules.ui2.PointerEvent
 import de.fabmax.kool.modules.ui2.dp
 
 @Composable
@@ -33,21 +27,31 @@ fun Popup(
     relativeToParent: Boolean = true,
     alignmentX: AlignmentX = AlignmentX.Start,
     alignmentY: AlignmentY = AlignmentY.Top,
+    modifier: Modifier = Modifier,
+    onDismissRequest: (PointerEvent) -> Unit = {},
     content: @Composable () -> Unit,
 ) {
     var parentPosition by remember { mutableStateOf(Vec2f.ZERO) }
-    Box((if (relativeToParent) Modifier.onPositioned {
-        parentPosition = Vec2f(it.leftPx, it.bottomPx)
-    } else Modifier.Companion)) {}
+    // Hide for first frame since parent position lags behind one frame
+    // TODO update position on same frame, possible to do with a custom layout?
+    var positioned by remember { mutableStateOf(false) }
 
-    Popup {
+    // Empty box for getting the position of the parent node
+    if (relativeToParent) Box(Modifier.onPositioned {
+        parentPosition = Vec2f(it.leftPx, it.bottomPx)
+        positioned = true
+    }) {}
+
+    if (!relativeToParent || positioned) Popup {
         Box(
-            Modifier.margin(
+            modifier.margin(
                 start = offset.x.dp + parentPosition.x.dp,
                 top = offset.y.dp + parentPosition.y.dp,
                 end = 0.dp,
                 bottom = 0.dp
             ).align(alignmentX, alignmentY)
+                //FIXME, this doesn't actually fire because we set input mode to ignore transparent backgrounds
+                .onClick { onDismissRequest(it) }
         ) {
             content()
         }

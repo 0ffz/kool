@@ -10,7 +10,9 @@ fun ComposableSurface(
     sizes: Sizes = Sizes.medium,
     content: @Composable () -> Unit,
 ): UiSurface {
-    val surface = UiSurface(colors, sizes, clearOnUpdateUi = false)
+    val surface = UiSurface(colors, sizes, clearOnUpdateUi = false).apply {
+        inputMode = UiSurface.InputCaptureMode.CaptureOverBackground
+    }
     val composition = UiSurfaceComposition(surface)
     composition.start {
         content()

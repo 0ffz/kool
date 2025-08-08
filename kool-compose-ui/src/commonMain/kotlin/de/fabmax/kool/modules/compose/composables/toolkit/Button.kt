@@ -10,13 +10,10 @@ import de.fabmax.kool.modules.ui2.dp
 
 @Composable
 fun Button(onClick: () -> Unit, modifier: Modifier = Modifier.Companion, content: @Composable () -> Unit) {
-    var isHovered by remember { mutableStateOf(false) }
-    val color = if (isHovered) Colors.secondary else Colors.secondaryVariant
+    val color = Colors.secondaryVariant
 
     Box(
         modifier.background(RoundRectBackground(color, 4.dp))
-            .onEnter { isHovered = true }
-            .onExit { isHovered = false }
             .padding(horizontal = Sizes.gap, vertical = Sizes.smallGap)
             .clickable { onClick() }
     ) {
