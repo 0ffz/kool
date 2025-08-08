@@ -13,7 +13,6 @@ import de.fabmax.kool.modules.compose.modifiers.background
 import de.fabmax.kool.modules.compose.modifiers.clickable
 import de.fabmax.kool.modules.compose.modifiers.padding
 import de.fabmax.kool.modules.ui2.ComboBoxNode
-import de.fabmax.kool.modules.ui2.PointerEvent
 import de.fabmax.kool.modules.ui2.RoundRectBackground
 import de.fabmax.kool.modules.ui2.dp
 
@@ -21,7 +20,7 @@ import de.fabmax.kool.modules.ui2.dp
 fun DropdownMenu(
     expanded: Boolean,
     modifier: Modifier = Modifier,
-    onDismissRequest: (PointerEvent) -> Unit = {},
+    onDismissRequest: () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
     if (expanded) Popup(
@@ -29,8 +28,10 @@ fun DropdownMenu(
         onDismissRequest = onDismissRequest,
         modifier = modifier.background(RoundRectBackground(LocalColors.current.background, 4.dp))
     ) {
-        Column(modifier) {
-            content()
+        Focusable(expanded, onFocusChanged = { if (!it) onDismissRequest() }) {
+            Column(modifier) {
+                content()
+            }
         }
     }
 }

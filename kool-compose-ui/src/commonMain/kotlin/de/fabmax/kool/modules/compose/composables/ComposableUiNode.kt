@@ -4,6 +4,6 @@ import de.fabmax.kool.modules.ui2.UiModifier
 import de.fabmax.kool.modules.ui2.UiNode
 import de.fabmax.kool.modules.ui2.UiSurface
 
-class ComposableUiNode(parent: UiNode?, surface: UiSurface): UiNode(parent, surface) {
+class ComposableUiNode(parent: UiNode?, surface: UiSurface) : UiNode(parent, surface) {
     override val modifier: UiModifier = UiModifier(surface)
 }

@@ -8,7 +8,7 @@ import de.fabmax.kool.modules.compose.modifiers.layout
 import de.fabmax.kool.modules.ui2.ColumnLayout
 
 @Composable
-fun Column(modifier: Modifier = Modifier.Companion, content: @Composable () -> Unit) {
+fun Column(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     Layout(::ComposableUiNode, modifier.layout(ColumnLayout)) {
         content()
     }

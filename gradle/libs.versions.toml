@@ -11,7 +11,7 @@ jsvg = "2.0.0"
 androidsvg = "1.4"
 physxjni = "2.6.0"
 physxjswebidl = "2.6.0-1"
-compose = "1.8.0-beta01"
+compose = "1.8.2"
 
 # wgpu backend
 wgpu4k = "0.1.1"

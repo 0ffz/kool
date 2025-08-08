@@ -15,7 +15,8 @@ fun Image(
     tint: Color? = null,
     size: ImageSize? = null,
     imageZ: Int? = null,
-    modifier: Modifier = Modifier.Companion, content: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit = {},
 ) {
     Layout(
         ::ImageNode, modifier

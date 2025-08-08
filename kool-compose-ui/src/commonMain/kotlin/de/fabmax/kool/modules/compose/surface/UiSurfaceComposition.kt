@@ -4,9 +4,12 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.Snapshot
 import de.fabmax.kool.modules.compose.LocalColors
+import de.fabmax.kool.modules.compose.LocalContentColor
 import de.fabmax.kool.modules.compose.LocalSizes
+import de.fabmax.kool.modules.compose.LocalTextStyle
 import de.fabmax.kool.modules.compose.LocalUiSurface
 import de.fabmax.kool.modules.compose.UiNodeApplier
+import de.fabmax.kool.modules.compose.composables.rendering.TextStyle
 import de.fabmax.kool.modules.compose.nanoTime
 import de.fabmax.kool.modules.compose.surface.layers.ComposeSceneContext
 import de.fabmax.kool.modules.compose.surface.layers.LocalComposeSceneContext
@@ -93,6 +96,8 @@ class UiSurfaceComposition(
                 LocalUiSurface provides surface,
                 LocalColors provides surface.colors,
                 LocalSizes provides surface.sizes,
+                LocalTextStyle provides TextStyle(),
+                LocalContentColor provides surface.colors.onBackground,
                 LocalComposeSceneContext provides layers,
             ) {
                 content()

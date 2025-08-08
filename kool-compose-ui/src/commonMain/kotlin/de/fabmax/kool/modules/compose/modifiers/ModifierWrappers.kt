@@ -23,9 +23,6 @@ fun Modifier.draw(render: UiNode.() -> Unit) =
     edit<UiModifier> { it.onRender.add(render) }
 
 @Stable
-fun Modifier.text(text: String) = edit<TextModifier> { it.text(text) }
-
-@Stable
 fun Modifier.size(size: Dimension) = size(size, size)
 
 @Stable

@@ -87,6 +87,9 @@ fun main() {
                             DropdownMenuItem(text = { Text("Item 2") })
                             DropdownMenuItem(text = { Text("Item 3") })
                         }
+
+                        var text by remember { mutableStateOf("Hello World") }
+                        TextField(text, onValueChange = { text = it })
 //                        var selected by remember { mutableStateOf(0) }
 //                        val items = listOf("Item 1", "Item 2", "Item 3")
 //                        Popup(alignmentX = AlignmentX.Center, alignmentY = AlignmentY.Center) {

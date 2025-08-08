@@ -17,7 +17,6 @@
 package de.fabmax.kool.modules.compose.modifiers
 
 import androidx.compose.runtime.Stable
-import de.fabmax.kool.modules.compose.modifiers.Modifier.Companion.then
 
 /**
  * An ordered, immutable collection of [modifier elements][Modifier.Element] that decorate or add

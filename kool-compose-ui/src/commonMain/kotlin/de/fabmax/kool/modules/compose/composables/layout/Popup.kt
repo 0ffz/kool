@@ -7,7 +7,6 @@ import de.fabmax.kool.modules.compose.surface.layers.Content
 import de.fabmax.kool.modules.compose.surface.layers.rememberComposeSceneLayer
 import de.fabmax.kool.modules.ui2.AlignmentX
 import de.fabmax.kool.modules.ui2.AlignmentY
-import de.fabmax.kool.modules.ui2.PointerEvent
 import de.fabmax.kool.modules.ui2.dp
 
 @Composable
@@ -28,7 +27,7 @@ fun Popup(
     alignmentX: AlignmentX = AlignmentX.Start,
     alignmentY: AlignmentY = AlignmentY.Top,
     modifier: Modifier = Modifier,
-    onDismissRequest: (PointerEvent) -> Unit = {},
+    onDismissRequest: () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
     var parentPosition by remember { mutableStateOf(Vec2f.ZERO) }
@@ -50,8 +49,6 @@ fun Popup(
                 end = 0.dp,
                 bottom = 0.dp
             ).align(alignmentX, alignmentY)
-                //FIXME, this doesn't actually fire because we set input mode to ignore transparent backgrounds
-                .onClick { onDismissRequest(it) }
         ) {
             content()
         }
