@@ -8,14 +8,10 @@ import de.fabmax.kool.addScene
 import de.fabmax.kool.addUiScene
 import de.fabmax.kool.math.Vec3f
 import de.fabmax.kool.math.deg
-import de.fabmax.kool.modules.compose.composables.layout.Box
 import de.fabmax.kool.modules.compose.composables.layout.Column
 import de.fabmax.kool.modules.compose.composables.rendering.Text
 import de.fabmax.kool.modules.compose.composables.toolkit.*
-import de.fabmax.kool.modules.compose.modifiers.Modifier
-import de.fabmax.kool.modules.compose.modifiers.background
-import de.fabmax.kool.modules.compose.modifiers.dragListener
-import de.fabmax.kool.modules.compose.modifiers.margin
+import de.fabmax.kool.modules.compose.modifiers.*
 import de.fabmax.kool.modules.compose.surface.ComposableSurface
 import de.fabmax.kool.modules.ksl.KslPbrShader
 import de.fabmax.kool.modules.ui2.*
@@ -57,7 +53,7 @@ fun main() {
                 var x by remember { mutableStateOf(0.dp) }
                 var y by remember { mutableStateOf(0.dp) }
                 var buttonText by remember { mutableStateOf(1) }
-                Box {
+//                ScrollArea {
                     Column(
                         Modifier.margin(x, 0.dp, y, 0.dp)
                             .background(RectBackground(MdColor.GREY))
@@ -89,7 +85,13 @@ fun main() {
                         }
 
                         var text by remember { mutableStateOf("Hello World") }
-                        TextField(text, onValueChange = { text = it })
+//                        println("[${Time.frameCount}] (Main) Recomposed at text")
+//                        TextField(text, onValueChange = {
+//                            println("[${Time.frameCount}] (Main) onValueChange: $it")
+//                            text = it
+//                        })
+
+                        TextField(text, onValueChange = { text = it }, modifier = Modifier.fillMaxWidth())
 //                        var selected by remember { mutableStateOf(0) }
 //                        val items = listOf("Item 1", "Item 2", "Item 3")
 //                        Popup(alignmentX = AlignmentX.Center, alignmentY = AlignmentY.Center) {
@@ -104,7 +106,7 @@ fun main() {
 //                        }
 //                        ComboBox(selected, items, onItemSelected = { selected = it })
                     }
-                }
+//                }
             })
         }
     }

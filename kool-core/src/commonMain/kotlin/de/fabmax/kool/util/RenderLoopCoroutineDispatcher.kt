@@ -12,6 +12,8 @@ import kotlin.coroutines.resume
 val Dispatchers.RenderLoop: CoroutineDispatcher
     get() = RenderLoopCoroutineDispatcher
 
+expect val Dispatchers.MainUI: CoroutineDispatcher
+
 object RenderLoopCoroutineDispatcher : CoroutineDispatcher() {
 
     private val queueLock = SynchronizedObject()

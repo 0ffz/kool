@@ -10,6 +10,7 @@ import de.fabmax.kool.pipeline.backend.RenderBackend
 import de.fabmax.kool.pipeline.ibl.BrdfLutPass
 import de.fabmax.kool.scene.Scene
 import de.fabmax.kool.util.*
+import kotlinx.coroutines.yield
 import kotlin.math.roundToInt
 
 /**
@@ -101,7 +102,7 @@ abstract class KoolContext {
         scenes -= scene
     }
 
-    protected fun render(dt: Double) {
+    protected suspend fun render(dt: Double) {
         if (isProfileRenderPasses) {
             Profiling.enter("!main-render-loop")
         }
@@ -116,6 +117,7 @@ abstract class KoolContext {
         fps = (frameTimes.size / sum) * 0.1 + fps * 0.9
 
         Input.poll(this)
+        yield()
 
         onRender.update()
         for (i in onRender.indices) {

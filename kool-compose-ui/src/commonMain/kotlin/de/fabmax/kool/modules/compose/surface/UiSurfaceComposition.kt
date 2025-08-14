@@ -3,18 +3,12 @@ package de.fabmax.kool.modules.compose.surface
 import androidx.compose.runtime.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.Snapshot
-import de.fabmax.kool.modules.compose.LocalColors
-import de.fabmax.kool.modules.compose.LocalContentColor
-import de.fabmax.kool.modules.compose.LocalSizes
-import de.fabmax.kool.modules.compose.LocalTextStyle
-import de.fabmax.kool.modules.compose.LocalUiSurface
-import de.fabmax.kool.modules.compose.UiNodeApplier
+import de.fabmax.kool.modules.compose.*
 import de.fabmax.kool.modules.compose.composables.rendering.TextStyle
-import de.fabmax.kool.modules.compose.nanoTime
 import de.fabmax.kool.modules.compose.surface.layers.ComposeSceneContext
 import de.fabmax.kool.modules.compose.surface.layers.LocalComposeSceneContext
 import de.fabmax.kool.modules.ui2.*
-import de.fabmax.kool.util.RenderLoop
+import de.fabmax.kool.util.MainUI
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -34,8 +28,10 @@ class UiSurfaceComposition(
     private var applyScheduled = false
     private var exitScheduled = false
 
-    private val clock = BroadcastFrameClock { hasFrameWaiters = true }
-    private val composeScope = (CoroutineScope(Dispatchers.RenderLoop) + clock).also { scope ->
+    private val clock = BroadcastFrameClock {
+        hasFrameWaiters = true
+    }
+    private val composeScope = (CoroutineScope(Dispatchers.MainUI) + clock).also { scope ->
         surface.onRelease { scope.cancel() }
     }
     private val snapshotHandle = Snapshot.registerGlobalWriteObserver {
@@ -54,7 +50,7 @@ class UiSurfaceComposition(
 
     /** Manages creating multiple layers in composition as box nodes under surface viewport. */
     private val layers = ComposeSceneContext(
-        createSubNode = { createSubNode(layer = 1) },
+        createSubNode = { createSubNode(layer = UiSurface.LAYER_POPUP) },
         removeNode = { viewport.mutChildren.remove(it) }
     )
 
@@ -66,18 +62,22 @@ class UiSurfaceComposition(
         !running || return
         running = true
 
-//        GuiyScopeManager.scopes += composeScope
         composeScope.launch {
             recomposer.runRecomposeAndApplyChanges()
         }
 
+        surface.onUpdate.stageAdd({
+        })
         composeScope.launch {
             setContent(content)
-            while (!exitScheduled) {
+            while (!exitScheduled && !surface.isReleased) {
                 if (hasFrameWaiters) {
                     hasFrameWaiters = false
+
+//                    println("[${Time.frameCount}] (UiSurfaceComposition) trigger update")
                     surface.triggerUpdate()
                 }
+//                println("[${Time.frameCount}] (UiSurfaceComposition) Send clock frame")
                 clock.sendFrame(nanoTime())
                 yield()
             }
@@ -106,7 +106,6 @@ class UiSurfaceComposition(
     }
 
     private fun createSubNode(layer: Int) = viewport.Box {
-        this.modifier.resetDefaults()
         modifier.zLayer(layer).size(Grow.Std, Grow.Std)
     } as BoxNode
 }

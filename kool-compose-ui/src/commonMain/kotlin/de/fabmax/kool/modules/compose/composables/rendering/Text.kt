@@ -4,32 +4,40 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import de.fabmax.kool.modules.compose.Layout
 import de.fabmax.kool.modules.compose.LocalContentColor
+import de.fabmax.kool.modules.compose.LocalSizes
 import de.fabmax.kool.modules.compose.LocalTextStyle
 import de.fabmax.kool.modules.compose.modifiers.Modifier
 import de.fabmax.kool.modules.compose.modifiers.edit
-import de.fabmax.kool.modules.ui2.TextModifier
-import de.fabmax.kool.modules.ui2.TextNode
-import de.fabmax.kool.modules.ui2.isWrapText
-import de.fabmax.kool.modules.ui2.text
-import de.fabmax.kool.modules.ui2.textColor
+import de.fabmax.kool.modules.ui2.*
 import de.fabmax.kool.util.Color
+import de.fabmax.kool.util.Font
 
 @Composable
 fun Text(
     text: String,
     modifier: Modifier = Modifier,
+    font: Font = LocalSizes.current.normalText,
+    fontSize: Float? = null,
     color: Color? = null,
     softWrap: Boolean = false,
     style: TextStyle = LocalTextStyle.current,
 ) {
+    val font = font.let {
+        if (fontSize != null) it.derive(fontSize)
+        else it
+    }
     val textColor = color ?: style.color ?: LocalContentColor.current
     Layout(
         ::TextNode, modifier
             .text(text)
             .textColor(textColor)
             .isWrapText(softWrap)
+            .font(font)
     )
 }
+
+@Stable
+private fun Modifier.font(font: Font) = edit<TextModifier> { it.font(font) }
 
 @Stable
 private fun Modifier.text(text: String) = edit<TextModifier> { it.text(text) }

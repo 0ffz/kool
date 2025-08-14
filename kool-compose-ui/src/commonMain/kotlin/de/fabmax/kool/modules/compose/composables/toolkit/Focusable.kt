@@ -1,42 +1,64 @@
 package de.fabmax.kool.modules.compose.composables.toolkit
 
+import androidx.compose.runtime.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import de.fabmax.kool.input.KeyEvent
 import de.fabmax.kool.modules.compose.Layout
 import de.fabmax.kool.modules.compose.LocalUiSurface
 import de.fabmax.kool.modules.compose.modifiers.Modifier
 import de.fabmax.kool.modules.ui2.*
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+
+@Composable
+fun rememberFocusRequester(): FocusRequester {
+    return remember { FocusRequester() }
+}
 
 @Composable
 fun Focusable(
-    focused: Boolean,
-    onFocusChanged: (Boolean) -> Unit,
+    focusRequester: FocusRequester = rememberFocusRequester(),
+    //TODO remove in favor of a modifier
+    onFocusChange: (Boolean) -> Unit = {},
+    onKeyboardInput: (KeyEvent) -> Unit = {},
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     val surface = LocalUiSurface.current
-    val focused by rememberUpdatedState(focused)
-    val onFocusChanged by rememberUpdatedState(onFocusChanged)
-    val focusable = remember(surface) {
-        FocusRequester(null, surface).apply {
-            this.onFocusChanged = onFocusChanged
+    val onFocusChanged by rememberUpdatedState(onFocusChange)
+    val onKeyboardInput by rememberUpdatedState(onKeyboardInput)
+    val focusable = remember(surface) { FocusableComposeNode(null, surface) }
+    // TODO bad pattern, these should be modifiers, avoiding too much refactoring for now.
+    focusable.onFocusChanged = onFocusChanged
+    focusable.onKeyEvent = onKeyboardInput
+    LaunchedEffect(focusable, focusRequester) {
+        focusRequester.request.collect {
+            surface.requestFocus(focusable)
         }
     }
-    if (focused) surface.requestFocus(focusable)
-    else surface.unfocus(focusable)
+
     Layout({ _, _ -> focusable }, modifier) {
         content()
     }
 }
 
-class FocusRequester(
+class FocusRequester {
+    val request = MutableSharedFlow<Unit>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
+    )
+
+    fun requestFocus() {
+        request.tryEmit(Unit)
+    }
+}
+
+class FocusableComposeNode(
     parent: UiNode?,
     surface: UiSurface,
 ) : UiNode(parent, surface), Focusable {
     var onFocusChanged: ((Boolean) -> Unit)? = null
+    var onKeyEvent: ((KeyEvent) -> Unit)? = null
     override val modifier: UiModifier = UiModifier(surface)
     override val isFocused: MutableStateValue<Boolean> = MutableStateValue(false)
 
@@ -51,5 +73,6 @@ class FocusRequester(
     }
 
     override fun onKeyEvent(keyEvent: KeyEvent) {
+        onKeyEvent?.invoke(keyEvent)
     }
 }

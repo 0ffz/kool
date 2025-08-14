@@ -1,20 +1,30 @@
 package de.fabmax.kool.modules.compose.composables.layout
 
 import androidx.compose.runtime.*
+import de.fabmax.kool.input.PointerInput
 import de.fabmax.kool.math.Vec2f
+import de.fabmax.kool.modules.compose.LocalUiSurface
+import de.fabmax.kool.modules.compose.ProvideZLayer
 import de.fabmax.kool.modules.compose.modifiers.*
 import de.fabmax.kool.modules.compose.surface.layers.Content
 import de.fabmax.kool.modules.compose.surface.layers.rememberComposeSceneLayer
 import de.fabmax.kool.modules.ui2.AlignmentX
 import de.fabmax.kool.modules.ui2.AlignmentY
+import de.fabmax.kool.modules.ui2.UiNode
+import de.fabmax.kool.modules.ui2.UiSurface
 import de.fabmax.kool.modules.ui2.dp
+import de.fabmax.kool.pipeline.RenderPass
 
 @Composable
 private fun Popup(
     content: @Composable () -> Unit,
 ) {
     val layer = rememberComposeSceneLayer()
-    layer.Content(content)
+    layer.Content {
+        ProvideZLayer(UiSurface.LAYER_POPUP) {
+            content()
+        }
+    }
 }
 
 /**
@@ -42,6 +52,8 @@ fun Popup(
     }) {}
 
     if (!relativeToParent || positioned) Popup {
+        var uiNode: UiNode? by remember { mutableStateOf(null) }
+        val surface = LocalUiSurface.current
         Box(
             modifier.margin(
                 start = offset.x.dp + parentPosition.x.dp,
@@ -49,8 +61,33 @@ fun Popup(
                 end = 0.dp,
                 bottom = 0.dp
             ).align(alignmentX, alignmentY)
+                .onMeasured { uiNode = it }
         ) {
             content()
+        }
+
+        DisposableEffect(uiNode, onDismissRequest) {
+            var dismissedLastFrame = false
+            var startedClickInBounds = false
+            val listener = { _: RenderPass.UpdateEvent ->
+                val ptr = PointerInput.primaryPointer
+                if(dismissedLastFrame) {
+                    onDismissRequest()
+                }
+                if (ptr.isAnyButtonPressed) {
+                    startedClickInBounds = uiNode?.isInBounds(PointerInput.primaryPointer.pos) == true
+                }
+                if (ptr.isAnyButtonReleased) {
+                    if(!startedClickInBounds && uiNode?.isInBounds(PointerInput.primaryPointer.pos) == false) {
+                        dismissedLastFrame = true
+                    }
+                    startedClickInBounds = false
+                }
+            }
+            surface.onUpdate.stageAdd(listener)
+            onDispose {
+                surface.onUpdate.stageRemove(listener)
+            }
         }
     }
 }

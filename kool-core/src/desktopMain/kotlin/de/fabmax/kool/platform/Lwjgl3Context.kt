@@ -9,9 +9,10 @@ import de.fabmax.kool.math.clamp
 import de.fabmax.kool.pipeline.backend.RenderBackendJvm
 import de.fabmax.kool.pipeline.backend.gl.RenderBackendGl
 import de.fabmax.kool.pipeline.backend.vk.RenderBackendVk
-import de.fabmax.kool.util.RenderLoopCoroutineDispatcher
-import de.fabmax.kool.util.logE
-import de.fabmax.kool.util.logI
+import de.fabmax.kool.util.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import org.lwjgl.glfw.GLFW.*
 import java.awt.Desktop
 import java.awt.image.BufferedImage
@@ -26,7 +27,7 @@ suspend fun Lwjgl3Context(): Lwjgl3Context {
     return ctx
 }
 
-class Lwjgl3Context internal constructor (val config: KoolConfigJvm) : KoolContext() {
+class Lwjgl3Context internal constructor(val config: KoolConfigJvm) : KoolContext() {
     override lateinit var backend: RenderBackendJvm
         private set
 
@@ -43,7 +44,9 @@ class Lwjgl3Context internal constructor (val config: KoolConfigJvm) : KoolConte
     override val windowHeight: Int get() = (backend.glfwWindow.framebufferHeight * renderScale).toInt()
     override var isFullscreen: Boolean
         get() = backend.glfwWindow.isFullscreen
-        set(value) { backend.glfwWindow.isFullscreen = value }
+        set(value) {
+            backend.glfwWindow.isFullscreen = value
+        }
 
     var maxFrameRate = config.maxFrameRate
     var windowNotFocusedFrameRate = config.windowNotFocusedFrameRate
@@ -61,6 +64,7 @@ class Lwjgl3Context internal constructor (val config: KoolConfigJvm) : KoolConte
                 logE { "Failed creating render backend ${backendProvider.displayName}: ${backendResult.exceptionOrNull()}\nFalling back to WebGL2" }
                 RenderBackendGl.createBackend(this@Lwjgl3Context).getOrThrow()
             }
+
             else -> error("Failed creating render backend ${backendProvider.displayName}: ${backendResult.exceptionOrNull()}")
         } as RenderBackendJvm
 
@@ -77,31 +81,35 @@ class Lwjgl3Context internal constructor (val config: KoolConfigJvm) : KoolConte
 
     fun setWindowIcon(icon: List<BufferedImage>) = backend.glfwWindow.setWindowIcon(icon)
 
-    override fun openUrl(url: String, sameWindow: Boolean)  = Desktop.getDesktop().browse(URI(url))
+    override fun openUrl(url: String, sameWindow: Boolean) = Desktop.getDesktop().browse(URI(url))
 
     fun close() {
         glfwSetWindowShouldClose(backend.glfwWindow.windowPtr, true)
     }
 
     override fun run() {
-        while (!glfwWindowShouldClose(backend.glfwWindow.windowPtr)) {
-            sysInfo.update()
-            backend.glfwWindow.pollEvents()
+        runBlocking(Dispatchers.MainUI) {
+            while (!glfwWindowShouldClose(backend.glfwWindow.windowPtr)) {
+                sysInfo.update()
+                backend.glfwWindow.pollEvents()
 
-            if (!backend.glfwWindow.isMinimized) {
-                renderFrame()
-            } else {
-                Thread.sleep(10)
+                if (!backend.glfwWindow.isMinimized) {
+                    renderFrame()
+                } else {
+//                    Thread.sleep(10)
+                    delay(10)
+                }
             }
+            logI { "Exiting..." }
+            scenes.forEach { it.release() }
+            backgroundScene.release()
+            onShutdown.updated().forEach { it(this@Lwjgl3Context) }
+            backend.cleanup(this@Lwjgl3Context)
         }
-        logI { "Exiting..." }
-        scenes.forEach { it.release() }
-        backgroundScene.release()
-        onShutdown.updated().forEach { it(this) }
-        backend.cleanup(this)
+        uiDispatcher.close()
     }
 
-    internal fun renderFrame() {
+    internal suspend fun renderFrame() {
         RenderLoopCoroutineDispatcher.executeDispatchedTasks()
 
         if (windowNotFocusedFrameRate > 0 || maxFrameRate > 0) {
@@ -120,7 +128,7 @@ class Lwjgl3Context internal constructor (val config: KoolConfigJvm) : KoolConte
         backend.renderFrame(this@Lwjgl3Context)
     }
 
-    private fun checkFrameRateLimits(prevTime: Long) {
+    private suspend fun checkFrameRateLimits(prevTime: Long) {
         val t = System.nanoTime()
         val dtFocused = if (maxFrameRate > 0) 1.0 / maxFrameRate else 0.0
         val dtUnfocused = if (windowNotFocusedFrameRate > 0) 1.0 / windowNotFocusedFrameRate else dtFocused
@@ -133,7 +141,7 @@ class Lwjgl3Context internal constructor (val config: KoolConfigJvm) : KoolConte
         }
     }
 
-    private fun delayFrameRender(untilFocused: Long, untilUnfocused: Long) {
+    private suspend fun delayFrameRender(untilFocused: Long, untilUnfocused: Long) {
         while (!glfwWindowShouldClose(backend.glfwWindow.windowPtr)) {
             val t = System.nanoTime()
             val isFocused = isWindowFocused || PlatformInputJvm.isMouseOverWindow
@@ -145,7 +153,8 @@ class Lwjgl3Context internal constructor (val config: KoolConfigJvm) : KoolConte
             val delayMillis = ((until - t) / 1e6).toLong()
             if (delayMillis > 5) {
                 val sleep = min(5L, delayMillis)
-                Thread.sleep(sleep)
+//                Thread.sleep(sleep)
+                delay(sleep)
                 if (sleep == delayMillis) {
                     break
                 }

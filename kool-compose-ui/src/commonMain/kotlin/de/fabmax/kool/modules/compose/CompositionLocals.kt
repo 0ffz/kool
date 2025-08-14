@@ -1,6 +1,7 @@
 package de.fabmax.kool.modules.compose
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.structuralEqualityPolicy
 import de.fabmax.kool.modules.compose.composables.rendering.TextStyle
@@ -21,3 +22,13 @@ val Sizes @Composable get() = LocalSizes.current
 
 val LocalTextStyle = compositionLocalOf(structuralEqualityPolicy()) { TextStyle.Default }
 val LocalContentColor = compositionLocalOf { Color.BLACK }
+
+val LocalZLayer = compositionLocalOf { 0 }
+
+@Composable
+inline fun ProvideZLayer(offset: Int, crossinline content: @Composable () -> Unit) {
+    val current = LocalZLayer.current
+    CompositionLocalProvider(LocalZLayer provides current + offset) {
+        content()
+    }
+}

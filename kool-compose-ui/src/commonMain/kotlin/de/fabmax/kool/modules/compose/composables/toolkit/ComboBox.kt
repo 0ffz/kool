@@ -28,11 +28,11 @@ fun DropdownMenu(
         onDismissRequest = onDismissRequest,
         modifier = modifier.background(RoundRectBackground(LocalColors.current.background, 4.dp))
     ) {
-        Focusable(expanded, onFocusChanged = { if (!it) onDismissRequest() }) {
-            Column(modifier) {
-                content()
-            }
+//        Focusable(focusRequester, onFocusChange = { if (!it) onDismissRequest() }) {
+        Column(modifier) {
+            content()
         }
+//        }
     }
 }
 
