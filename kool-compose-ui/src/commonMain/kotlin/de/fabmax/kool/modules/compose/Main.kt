@@ -1,6 +1,7 @@
 package de.fabmax.kool.modules.compose
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.Composition
 import androidx.compose.runtime.Recomposer
 import de.fabmax.kool.modules.ksl.lang.KslExprBool1
@@ -15,12 +16,14 @@ import kotlin.reflect.KProperty
  *
  * Resources:
  *  - Similar DSL idea with some explanation, https://arunkumar.dev/jetpack-compose-for-non-ui-tree-construction-and-code-generation/
+ *  - [ExpressionNode] instructs compose to emit nodes to children via [ComposeNode]
+ *  - [ShaderNodeApplier] handles adding children
+ *  - [ExampleNodes] contains example definitions for [If] [For] etc...
  */
 fun main() {
     // Simple node that contains an [expression] and mutable list of [children]
     val rootNode = ExampleShaderNode()
     // We never use the recomposer here, but it needs to be provided.
-    // ShaderNodeApplier handles adding children
     val composition = Composition(ShaderNodeApplier(rootNode), Recomposer(Dispatchers.Main))
     composition.setContent {
         ExampleShader()
