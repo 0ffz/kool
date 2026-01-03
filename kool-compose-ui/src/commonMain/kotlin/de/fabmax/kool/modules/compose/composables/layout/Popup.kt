@@ -7,6 +7,7 @@ import de.fabmax.kool.modules.ui2.AlignmentX
 import de.fabmax.kool.modules.ui2.AlignmentY
 import de.fabmax.kool.modules.ui2.PointerEvent
 import de.fabmax.kool.modules.ui2.dp
+import me.dvyy.compose.minimal.modifier.Modifier
 import me.dvyy.compose.minimal.runtime.layers.Content
 import me.dvyy.compose.minimal.runtime.layers.rememberComposeSceneLayer
 

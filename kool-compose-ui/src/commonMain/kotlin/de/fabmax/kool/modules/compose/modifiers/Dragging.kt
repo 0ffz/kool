@@ -1,6 +1,7 @@
 package de.fabmax.kool.modules.compose.modifiers
 
 import de.fabmax.kool.modules.ui2.*
+import me.dvyy.compose.minimal.modifier.Modifier
 
 fun Modifier.dragListener(draggable: Draggable) = edit<UiModifier> {
     it.dragListener(draggable)

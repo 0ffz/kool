@@ -1,18 +1,22 @@
-package de.fabmax.kool.modules.compose
+package de.fabmax.kool.modules.compose.composables
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
-import de.fabmax.kool.modules.compose.modifiers.ImmutableUiModifier
-import de.fabmax.kool.modules.compose.modifiers.Modifier
-import de.fabmax.kool.modules.compose.modifiers.materialize
+import de.fabmax.kool.modules.compose.InternalKoolComposeAPI
+import de.fabmax.kool.modules.compose.LocalUiSurface
+import de.fabmax.kool.modules.compose.UiNodeApplier
+import de.fabmax.kool.modules.compose.modifiers.UiModifierWrapper
 import de.fabmax.kool.modules.ui2.UiNode
 import de.fabmax.kool.modules.ui2.UiSurface
+import me.dvyy.compose.minimal.modifier.Modifier
+import me.dvyy.compose.minimal.modifier.materialize
 
 /**
  * The main component for layout, it measures and positions zero or more children.
  */
 @Composable
+@InternalKoolComposeAPI
 inline fun <T : UiNode> Layout(
     noinline constructor: (parent: UiNode?, surface: UiSurface) -> T,
     modifier: Modifier,
@@ -27,7 +31,7 @@ inline fun <T : UiNode> Layout(
             set(materializedModifier) {
                 this.modifier.resetDefaults()
                 materializedModifier.foldOut(this.modifier) { modifier, uiModifier ->
-                    if (modifier is ImmutableUiModifier) modifier.applyTo(this.modifier)
+                    if (modifier is UiModifierWrapper) modifier.applyTo(this.modifier)
                     uiModifier
                 }
                 //TODO update modifier system to be able to set this value directly

@@ -1,14 +1,14 @@
-package de.fabmax.kool.modules.compose.surface
+package de.fabmax.kool.modules.compose
 
-import androidx.compose.runtime.*
-import androidx.compose.runtime.snapshots.Snapshot
-import de.fabmax.kool.modules.compose.LocalColors
-import de.fabmax.kool.modules.compose.LocalSizes
-import de.fabmax.kool.modules.compose.LocalUiSurface
-import de.fabmax.kool.modules.compose.UiNodeApplier
-import de.fabmax.kool.modules.ui2.*
-import de.fabmax.kool.util.KoolDispatchers
-import kotlinx.coroutines.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import de.fabmax.kool.modules.ui2.Box
+import de.fabmax.kool.modules.ui2.BoxNode
+import de.fabmax.kool.modules.ui2.Grow
+import de.fabmax.kool.modules.ui2.UiNode
+import de.fabmax.kool.modules.ui2.UiSurface
+import de.fabmax.kool.modules.ui2.size
+import de.fabmax.kool.modules.ui2.zLayer
 import me.dvyy.compose.minimal.me.dvyy.compose.minimal.runtime.MinimalComposition
 
 /**
@@ -24,7 +24,7 @@ class UiSurfaceComposition(
 ) {
     private val viewport: UiNode = surface.viewport
 
-    val composition = MinimalComposition<UiNode>(
+    private val composition = MinimalComposition<UiNode>(
         onFrameAwaiters = {
             surface.triggerUpdate()
         },
@@ -48,4 +48,12 @@ class UiSurfaceComposition(
         removeLayerNode = { viewport.mutChildren.remove(it) },
         applierForNode = { UiNodeApplier(it) },
     )
+
+    fun start(content: @Composable () -> Unit) {
+        composition.start { content() }
+    }
+
+    fun exit() {
+        composition.close()
+    }
 }

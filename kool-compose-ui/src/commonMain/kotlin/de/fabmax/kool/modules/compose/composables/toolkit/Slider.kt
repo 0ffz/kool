@@ -2,12 +2,12 @@ package de.fabmax.kool.modules.compose.composables.toolkit
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import de.fabmax.kool.modules.compose.Layout
 import de.fabmax.kool.modules.compose.LocalUiSurface
-import de.fabmax.kool.modules.compose.modifiers.Modifier
+import de.fabmax.kool.modules.compose.composables.Layout
 import de.fabmax.kool.modules.compose.modifiers.dragListener
 import de.fabmax.kool.modules.compose.modifiers.edit
 import de.fabmax.kool.modules.ui2.*
+import me.dvyy.compose.minimal.modifier.Modifier
 
 @Composable
 fun Slider(

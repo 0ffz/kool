@@ -8,7 +8,6 @@ import de.fabmax.kool.modules.compose.LocalUiSurface
 import de.fabmax.kool.modules.compose.composables.layout.Box
 import de.fabmax.kool.modules.compose.composables.layout.Column
 import de.fabmax.kool.modules.compose.composables.layout.Popup
-import de.fabmax.kool.modules.compose.modifiers.Modifier
 import de.fabmax.kool.modules.compose.modifiers.background
 import de.fabmax.kool.modules.compose.modifiers.clickable
 import de.fabmax.kool.modules.compose.modifiers.padding
@@ -16,6 +15,7 @@ import de.fabmax.kool.modules.ui2.ComboBoxNode
 import de.fabmax.kool.modules.ui2.PointerEvent
 import de.fabmax.kool.modules.ui2.RoundRectBackground
 import de.fabmax.kool.modules.ui2.dp
+import me.dvyy.compose.minimal.modifier.Modifier
 
 @Composable
 fun DropdownMenu(

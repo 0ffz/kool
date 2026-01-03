@@ -8,15 +8,14 @@ import de.fabmax.kool.addScene
 import de.fabmax.kool.addUiScene
 import de.fabmax.kool.math.Vec3f
 import de.fabmax.kool.math.deg
+import de.fabmax.kool.modules.compose.addComposableSurface
 import de.fabmax.kool.modules.compose.composables.layout.Box
 import de.fabmax.kool.modules.compose.composables.layout.Column
 import de.fabmax.kool.modules.compose.composables.rendering.Text
 import de.fabmax.kool.modules.compose.composables.toolkit.*
-import de.fabmax.kool.modules.compose.modifiers.Modifier
 import de.fabmax.kool.modules.compose.modifiers.background
 import de.fabmax.kool.modules.compose.modifiers.dragListener
 import de.fabmax.kool.modules.compose.modifiers.margin
-import de.fabmax.kool.modules.compose.surface.ComposableSurface
 import de.fabmax.kool.modules.ksl.KslPbrShader
 import de.fabmax.kool.modules.ui2.*
 import de.fabmax.kool.scene.addColorMesh
@@ -24,6 +23,7 @@ import de.fabmax.kool.scene.defaultOrbitCamera
 import de.fabmax.kool.util.Color
 import de.fabmax.kool.util.MdColor
 import de.fabmax.kool.util.Time
+import me.dvyy.compose.minimal.modifier.Modifier
 
 //TODO delete, using for faster testing
 fun main() {
@@ -53,7 +53,7 @@ fun main() {
             }
         }
         addUiScene {
-            addNode(ComposableSurface(this) {
+            addComposableSurface {
                 var x by remember { mutableStateOf(0.dp) }
                 var y by remember { mutableStateOf(0.dp) }
                 var buttonText by remember { mutableStateOf(1) }
@@ -102,7 +102,7 @@ fun main() {
 //                        ComboBox(selected, items, onItemSelected = { selected = it })
                     }
                 }
-            })
+            }
         }
     }
 }

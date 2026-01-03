@@ -3,6 +3,9 @@ package de.fabmax.kool.modules.compose
 import androidx.compose.runtime.AbstractApplier
 import de.fabmax.kool.modules.ui2.UiNode
 
+/**
+ * Class to let compose manage [UiNode]'s children.
+ */
 class UiNodeApplier(root: UiNode) : AbstractApplier<UiNode>(root) {
     override fun insertTopDown(index: Int, instance: UiNode) {
         // Ignored, we insert bottom-up.

@@ -1,13 +1,13 @@
 package de.fabmax.kool.modules.compose.composables.rendering
 
 import androidx.compose.runtime.Composable
-import de.fabmax.kool.modules.compose.Layout
-import de.fabmax.kool.modules.compose.modifiers.Modifier
+import de.fabmax.kool.modules.compose.composables.Layout
 import de.fabmax.kool.modules.compose.modifiers.edit
 import de.fabmax.kool.modules.compose.modifiers.optionalEdit
 import de.fabmax.kool.modules.ui2.*
 import de.fabmax.kool.pipeline.Texture2d
 import de.fabmax.kool.util.Color
+import me.dvyy.compose.minimal.modifier.Modifier
 
 @Composable
 fun Image(
@@ -15,7 +15,8 @@ fun Image(
     tint: Color? = null,
     size: ImageSize? = null,
     imageZ: Int? = null,
-    modifier: Modifier = Modifier.Companion, content: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
 ) {
     Layout(
         ::ImageNode, modifier

@@ -7,9 +7,10 @@ import de.fabmax.kool.modules.compose.composables.layout.Box
 import de.fabmax.kool.modules.compose.modifiers.*
 import de.fabmax.kool.modules.ui2.RoundRectBackground
 import de.fabmax.kool.modules.ui2.dp
+import me.dvyy.compose.minimal.modifier.Modifier
 
 @Composable
-fun Button(onClick: () -> Unit, modifier: Modifier = Modifier.Companion, content: @Composable () -> Unit) {
+fun Button(onClick: () -> Unit, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     val color = Colors.secondaryVariant
 
     Box(
