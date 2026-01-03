@@ -11,6 +11,7 @@ kotlin {
         commonMain.dependencies {
             api(libs.kotlin.coroutines)
             api(compose.runtime)
+            implementation("me.dvyy.compose.minimal:runtime")
             implementation(project(":kool-core"))
         }
         commonTest.dependencies {

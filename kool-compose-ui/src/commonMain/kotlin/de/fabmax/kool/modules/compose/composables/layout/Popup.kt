@@ -3,12 +3,12 @@ package de.fabmax.kool.modules.compose.composables.layout
 import androidx.compose.runtime.*
 import de.fabmax.kool.math.Vec2f
 import de.fabmax.kool.modules.compose.modifiers.*
-import de.fabmax.kool.modules.compose.surface.layers.Content
-import de.fabmax.kool.modules.compose.surface.layers.rememberComposeSceneLayer
 import de.fabmax.kool.modules.ui2.AlignmentX
 import de.fabmax.kool.modules.ui2.AlignmentY
 import de.fabmax.kool.modules.ui2.PointerEvent
 import de.fabmax.kool.modules.ui2.dp
+import me.dvyy.compose.minimal.runtime.layers.Content
+import me.dvyy.compose.minimal.runtime.layers.rememberComposeSceneLayer
 
 @Composable
 private fun Popup(

@@ -1,13 +1,16 @@
-//package de.fabmax.kool.modules.compose.animation
-//
-//import androidx.compose.runtime.*
-//import de.fabmax.kool.modules.ui2.AnimatedState
-//import de.fabmax.kool.modules.ui2.MutableStateValue
-//import de.fabmax.kool.util.RenderLoop
-//import de.fabmax.kool.util.Time
-//import kotlinx.coroutines.Dispatchers
-//import kotlinx.coroutines.launch
-//import kotlinx.coroutines.yield
+package de.fabmax.kool.modules.compose.animation
+
+import androidx.compose.runtime.LaunchedEffect
+import de.fabmax.kool.modules.ui2.Animator
+
+
+import androidx.compose.runtime.*
+import de.fabmax.kool.modules.ui2.MutableStateValue
+import de.fabmax.kool.util.KoolDispatchers
+import de.fabmax.kool.util.Time
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 //
 ////TODO figure out more general way, look at how compose android does it, any public libraries we can use for it?
 //@Composable
@@ -18,7 +21,7 @@
 //    LaunchedEffect(targetValue) {
 //        val startValue = animatedValue.value
 //        val durationMillis = 300L // animation duration: 300 ms
-//        launch(Dispatchers.RenderLoop) {
+//        launch(KoolDispatchers.Frontend) {
 //            val startTime = withFrameNanos { it }
 //            while (true) {
 //                val currentTime = withFrameNanos { it }
@@ -39,22 +42,22 @@
 //}
 //
 //
-//@Composable
-//fun <T> MutableStateValue<T>.collectAsState(): State<T> {
-//    return produceState(this.value) {
-//        onChange { old, new -> this.value = new }
-//    }
-//}
-//
-//@Suppress("NOTHING_TO_INLINE")
-//@Composable
-//inline fun <T : Any> LaunchAnimation(animator: AnimatedState<T>) {
-//    LaunchedEffect(animator.isActive) {
-//        if (animator.isActive) launch(Dispatchers.RenderLoop) {
-//            while (animator.isActive) {
-//                animator.progress(Time.deltaT)
-//                yield()
-//            }
-//        }
-//    }
-//}
+@Composable
+fun <T> MutableStateValue<T>.collectAsState(): State<T> {
+    return produceState(this.value) {
+        onChange { old, new -> this.value = new }
+    }
+}
+
+@Suppress("NOTHING_TO_INLINE")
+@Composable
+inline fun LaunchAnimation(animator: Animator<*, *>) {
+    LaunchedEffect(animator.isActive) {
+        if (animator.isActive) launch(KoolDispatchers.Frontend) {
+            while (animator.isActive) {
+                animator.update(Time.deltaT)
+                yield()
+            }
+        }
+    }
+}

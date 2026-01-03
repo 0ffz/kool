@@ -16,9 +16,9 @@ fun ComposableSurface(
         inputMode = UiSurface.InputCaptureMode.CaptureOverBackground
     }
     val composition = UiSurfaceComposition(surface)
-    composition.start {
+    composition.composition.start {
         content()
     }
-    surface.onRelease { composition.exit() }
+    surface.onRelease { composition.composition.close() }
     return surface
 }
