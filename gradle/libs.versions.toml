@@ -1,5 +1,6 @@
 [versions]
 agp = "8.12.3"
+compose = "1.9.3"
 kotlin = "2.2.21"
 kotlin-coroutines = "1.10.2"
 kotlin-serialization = "1.9.0"
@@ -68,6 +69,9 @@ plugindep-maven-publish = { group = "com.vanniktech", name = "gradle-maven-publi
 
 [plugins]
 webidl = { id = "de.fabmax.webidl-util", version = "0.10.5" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose" }
+
 
 [bundles]
 lwjgl = ["lwjgl-core", "lwjgl-glfw", "lwjgl-jemalloc", "lwjgl-opengl", "lwjgl-vulkan", "lwjgl-vma", "lwjgl-shaderc", "lwjgl-nfd", "lwjgl-stb", "lwjgl-jawt", "lwjgl-msdfgen"]
