@@ -40,7 +40,7 @@ fun RadioButton(
 ) {
     Layout(
         ::RadioButtonNode, modifier
-        .edit<RadioButtonModifier> { it.onClick { onCheckedChange?.invoke(checked) } }
+        .edit<RadioButtonModifier> { it.onClick { onCheckedChange?.invoke(!checked) } }
         .edit<RadioButtonModifier> { it.toggleState(checked) }
     )
 }

@@ -24,8 +24,13 @@ class UiSurfaceComposition(
 ) {
     private val viewport: UiNode = surface.viewport
     private val clock = BroadcastFrameClock()
+    private val contentCompat = SurfaceContentCompat()
 
     init {
+        surface.content = {
+            contentCompat.content(this)
+        }
+
         surface.parentScene.coroutineScope.launch {
             while (true) {
                 Time.frameClock.withFrameNanos {
@@ -47,6 +52,7 @@ class UiSurfaceComposition(
                 LocalSizes provides surface.sizes,
                 LocalTextStyle provides TextStyle(),
                 LocalContentColor provides surface.colors.onBackground,
+                LocalSurfaceContentCompat provides contentCompat,
             ) {
                 content()
             }

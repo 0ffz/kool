@@ -73,9 +73,9 @@ fun main() {
                             Text("Counter: $buttonText")
                         }
                         var checked by remember { mutableStateOf(false) }
-                        Switch(checked, onCheckedChange = { checked = !it })
-                        Checkbox(checked, onCheckedChange = { checked = !it })
-                        RadioButton(checked, onCheckedChange = { checked = !it })
+                        Switch(checked, onCheckedChange = { checked = it })
+                        Checkbox(checked, onCheckedChange = { checked = it })
+                        RadioButton(checked, onCheckedChange = { checked = it })
                         var value by remember { mutableStateOf(1f) }
                         Slider(value, onValueChange = { value = it }, range = 0f..10f)
 

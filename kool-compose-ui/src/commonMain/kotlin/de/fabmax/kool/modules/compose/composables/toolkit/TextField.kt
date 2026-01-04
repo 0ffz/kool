@@ -5,7 +5,11 @@ import androidx.compose.runtime.remember
 import de.fabmax.kool.modules.compose.LocalSizes
 import de.fabmax.kool.modules.compose.LocalUiSurface
 import de.fabmax.kool.modules.compose.composables.Layout
-import de.fabmax.kool.modules.compose.modifiers.*
+import de.fabmax.kool.modules.compose.modifiers.dragListener
+import de.fabmax.kool.modules.compose.modifiers.edit
+import de.fabmax.kool.modules.compose.modifiers.hoverListener
+import de.fabmax.kool.modules.compose.modifiers.onClick
+import de.fabmax.kool.modules.compose.state.CompatUiScope
 import de.fabmax.kool.modules.ui2.*
 import de.fabmax.kool.util.Font
 import me.dvyy.compose.mini.modifier.Modifier
@@ -22,6 +26,14 @@ fun TextField(
 ) {
     val surface = LocalUiSurface.current
     val textFieldNode = remember { TextFieldNode(null, surface) }
+
+    CompatUiScope {
+        if (textFieldNode.isFocused.use()) {
+            surface.onEachFrame { ctx ->
+                textFieldNode.updateCaretBlinkState(ctx)
+            }
+        }
+    }
 
     Layout(
         { _, _ -> textFieldNode }, modifier

@@ -16,6 +16,8 @@ val LocalColors = compositionLocalOf<Colors> { error("No Colors provided") }
 
 val LocalSizes = compositionLocalOf<Sizes> { error("No Sizes provided") }
 
+val LocalSurfaceContentCompat = compositionLocalOf<SurfaceContentCompat> { error("No SurfaceContentCompat provided") }
+
 val Colors @Composable get() = LocalColors.current
 val Sizes @Composable get() = LocalSizes.current
 
