@@ -9,26 +9,26 @@ import me.dvyy.compose.minimal.modifier.Modifier
 @Composable
 fun Switch(
     checked: Boolean,
-    onCheckedChange: ((Boolean) -> Unit)?,
+    onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Layout(
         ::SwitchNode, modifier
-            .edit<SwitchModifier> { it.onClick { onCheckedChange?.invoke(checked) } }
-            .edit<SwitchModifier> { it.toggleState(checked) }
+        .edit<SwitchModifier> { it.onClick { onCheckedChange(!checked) } }
+        .edit<SwitchModifier> { it.toggleState(checked) }
     )
 }
 
 @Composable
 fun Checkbox(
     checked: Boolean,
-    onCheckedChange: ((Boolean) -> Unit)?,
+    onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Layout(
         ::CheckboxNode, modifier
-            .edit<CheckboxModifier> { it.onClick { onCheckedChange?.invoke(checked) } }
-            .edit<CheckboxModifier> { it.toggleState(checked) }
+        .edit<CheckboxModifier> { it.onClick { onCheckedChange(!checked) } }
+        .edit<CheckboxModifier> { it.toggleState(checked) }
     )
 }
 
@@ -40,7 +40,7 @@ fun RadioButton(
 ) {
     Layout(
         ::RadioButtonNode, modifier
-            .edit<RadioButtonModifier> { it.onClick { onCheckedChange?.invoke(checked) } }
-            .edit<RadioButtonModifier> { it.toggleState(checked) }
+        .edit<RadioButtonModifier> { it.onClick { onCheckedChange?.invoke(checked) } }
+        .edit<RadioButtonModifier> { it.toggleState(checked) }
     )
 }

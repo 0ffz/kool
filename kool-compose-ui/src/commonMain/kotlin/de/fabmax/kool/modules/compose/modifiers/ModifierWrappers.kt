@@ -24,3 +24,9 @@ fun Modifier.draw(render: UiNode.() -> Unit) =
 
 @Stable
 fun Modifier.text(text: String) = edit<TextModifier> { it.text(text) }
+
+@Stable
+fun Modifier.onWheelX(run: (PointerEvent) -> Unit) = edit<UiModifier> { it.onWheelX(run) }
+
+@Stable
+fun Modifier.onWheelY(run: (PointerEvent) -> Unit) = edit<UiModifier> { it.onWheelY(run) }

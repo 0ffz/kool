@@ -1,15 +1,14 @@
 package de.fabmax.kool.modules.compose
 
+import androidx.compose.runtime.BroadcastFrameClock
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import de.fabmax.kool.modules.ui2.Box
-import de.fabmax.kool.modules.ui2.BoxNode
-import de.fabmax.kool.modules.ui2.Grow
-import de.fabmax.kool.modules.ui2.UiNode
-import de.fabmax.kool.modules.ui2.UiSurface
-import de.fabmax.kool.modules.ui2.size
-import de.fabmax.kool.modules.ui2.zLayer
-import me.dvyy.compose.minimal.me.dvyy.compose.minimal.runtime.MinimalComposition
+import de.fabmax.kool.modules.compose.composables.rendering.TextStyle
+import de.fabmax.kool.modules.ui2.*
+import de.fabmax.kool.util.Time
+import kotlinx.coroutines.launch
+import me.dvyy.compose.minimal.runtime.MinimalComposition
+import kotlin.time.ExperimentalTime
 
 /**
  * Manages a composition for a given [UiSurface].
@@ -19,21 +18,35 @@ import me.dvyy.compose.minimal.me.dvyy.compose.minimal.runtime.MinimalCompositio
  *
  * The surface is responsible for calling [exit] when released to stop further recompositions, effects, etc...
  */
+@OptIn(ExperimentalTime::class)
 class UiSurfaceComposition(
     val surface: UiSurface,
 ) {
     private val viewport: UiNode = surface.viewport
+    private val clock = BroadcastFrameClock()
+
+    init {
+        surface.parentScene.coroutineScope.launch {
+            while(true) {
+                Time.frameClock.withFrameNanos {
+                    clock.sendFrame(it)
+                }
+            }
+        }
+    }
 
     private val composition = MinimalComposition<UiNode>(
-        onFrameAwaiters = {
+        onNodesChanged = {
             surface.triggerUpdate()
         },
-        coroutineContext = surface.parentScene.coroutineScope.coroutineContext,
+        coroutineContext = surface.parentScene.coroutineScope.coroutineContext + clock,
         wrapContent = { content ->
             CompositionLocalProvider(
                 LocalUiSurface provides surface,
                 LocalColors provides surface.colors,
                 LocalSizes provides surface.sizes,
+                LocalTextStyle provides TextStyle(),
+                LocalContentColor provides surface.colors.onBackground,
             ) {
                 content()
             }
@@ -42,7 +55,7 @@ class UiSurfaceComposition(
         createLayerNode = {
             viewport.Box {
                 this.modifier.resetDefaults()
-                modifier.zLayer(0).size(Grow.Std, Grow.Std)
+                modifier.zLayer(UiSurface.LAYER_POPUP).size(Grow.Std, Grow.Std)
             } as BoxNode
         },
         removeLayerNode = { viewport.mutChildren.remove(it) },

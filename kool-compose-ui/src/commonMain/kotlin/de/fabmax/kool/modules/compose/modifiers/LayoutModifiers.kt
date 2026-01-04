@@ -24,16 +24,29 @@ fun Modifier.height(height: Dimension) = edit<UiModifier> { it.height(height) }
 @Stable
 fun Modifier.layout(layout: Layout) = edit<UiModifier> { it.layout(layout) }
 
-@Stable
-fun Modifier.padding(all: Dp) = padding(all, all, all, all)
+private fun Dp.orElse(value: Dp) = if (this == Dp.UNBOUNDED) value else this
 
 @Stable
-fun Modifier.padding(start: Dp, end: Dp, top: Dp, bottom: Dp) = edit<UiModifier> {
-    it.padding(start = start, end = end, top = top, bottom = bottom)
+fun Modifier.padding(
+    start: Dp = Dp.UNBOUNDED,
+    end: Dp = Dp.UNBOUNDED,
+    top: Dp = Dp.UNBOUNDED,
+    bottom: Dp = Dp.UNBOUNDED,
+) = edit<UiModifier> {
+    it.padding(
+        start = start.orElse(it.paddingStart),
+        end = end.orElse(it.paddingEnd),
+        top = top.orElse(it.paddingTop),
+        bottom = bottom.orElse(it.paddingBottom)
+    )
 }
 
 @Stable
-fun Modifier.padding(horizontal: Dp, vertical: Dp = horizontal) = padding(horizontal, horizontal, vertical, vertical)
+fun Modifier.padding(horizontal: Dp = Dp.UNBOUNDED, vertical: Dp = Dp.UNBOUNDED) =
+    padding(horizontal, horizontal, vertical, vertical)
+
+@Stable
+fun Modifier.padding(all: Dp) = padding(all, all, all, all)
 
 @Stable
 fun Modifier.margin(all: Dp) = margin(all, all, all, all)

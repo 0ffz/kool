@@ -5,6 +5,7 @@ import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
 import de.fabmax.kool.modules.compose.InternalKoolComposeAPI
 import de.fabmax.kool.modules.compose.LocalUiSurface
+import de.fabmax.kool.modules.compose.LocalZLayer
 import de.fabmax.kool.modules.compose.UiNodeApplier
 import de.fabmax.kool.modules.compose.modifiers.UiModifierWrapper
 import de.fabmax.kool.modules.ui2.UiNode
@@ -23,6 +24,7 @@ inline fun <T : UiNode> Layout(
     content: @Composable () -> Unit = {},
 ) {
     val surface = LocalUiSurface.current
+    val zLayer = LocalZLayer.current
 
     val materializedModifier = currentComposer.materialize(modifier)
     ComposeNode<UiNode, UiNodeApplier>(
@@ -30,11 +32,15 @@ inline fun <T : UiNode> Layout(
         update = {
             set(materializedModifier) {
                 this.modifier.resetDefaults()
+                this.modifier.zLayer = zLayer
                 materializedModifier.foldOut(this.modifier) { modifier, uiModifier ->
                     if (modifier is UiModifierWrapper) modifier.applyTo(this.modifier)
                     uiModifier
                 }
                 //TODO update modifier system to be able to set this value directly
+            }
+            set(zLayer) {
+                this.modifier.zLayer = zLayer
             }
         },
         content = content,

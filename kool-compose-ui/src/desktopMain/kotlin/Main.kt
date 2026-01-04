@@ -15,6 +15,7 @@ import de.fabmax.kool.modules.compose.composables.rendering.Text
 import de.fabmax.kool.modules.compose.composables.toolkit.*
 import de.fabmax.kool.modules.compose.modifiers.background
 import de.fabmax.kool.modules.compose.modifiers.dragListener
+import de.fabmax.kool.modules.compose.modifiers.fillMaxWidth
 import de.fabmax.kool.modules.compose.modifiers.margin
 import de.fabmax.kool.modules.ksl.KslPbrShader
 import de.fabmax.kool.modules.ui2.*
@@ -87,6 +88,15 @@ fun main() {
                             DropdownMenuItem(text = { Text("Item 2") })
                             DropdownMenuItem(text = { Text("Item 3") })
                         }
+
+                        var text by remember { mutableStateOf("Hello World") }
+//                        println("[${Time.frameCount}] (Main) Recomposed at text")
+//                        TextField(text, onValueChange = {
+//                            println("[${Time.frameCount}] (Main) onValueChange: $it")
+//                            text = it
+//                        })
+
+                        TextField(text, onValueChange = { text = it }, modifier = Modifier.fillMaxWidth())
 //                        var selected by remember { mutableStateOf(0) }
 //                        val items = listOf("Item 1", "Item 2", "Item 3")
 //                        Popup(alignmentX = AlignmentX.Center, alignmentY = AlignmentY.Center) {
