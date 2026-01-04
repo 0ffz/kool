@@ -7,6 +7,7 @@ import de.fabmax.kool.modules.ui2.UiSurface
 import de.fabmax.kool.scene.Node
 import de.fabmax.kool.scene.Scene
 
+@ExperimentalKoolComposeAPI
 fun ComposableSurface(
     scene: Scene,
     colors: Colors = Colors.darkColors(),
@@ -24,6 +25,7 @@ fun ComposableSurface(
     return surface
 }
 
+@ExperimentalKoolComposeAPI
 fun Node.addComposableSurface(
     colors: Colors = Colors.darkColors(),
     sizes: Sizes = Sizes.medium,

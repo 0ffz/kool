@@ -8,6 +8,7 @@ import de.fabmax.kool.addScene
 import de.fabmax.kool.addUiScene
 import de.fabmax.kool.math.Vec3f
 import de.fabmax.kool.math.deg
+import de.fabmax.kool.modules.compose.ExperimentalKoolComposeAPI
 import de.fabmax.kool.modules.compose.addComposableSurface
 import de.fabmax.kool.modules.compose.composables.layout.Box
 import de.fabmax.kool.modules.compose.composables.layout.Column
@@ -27,6 +28,7 @@ import de.fabmax.kool.util.Time
 import me.dvyy.compose.mini.modifier.Modifier
 
 //TODO delete, using for faster testing
+@OptIn(ExperimentalKoolComposeAPI::class)
 fun main() {
     KoolApplication(config = KoolConfigJvm()) {
         addScene {
@@ -54,11 +56,20 @@ fun main() {
             }
         }
         addUiScene {
+//            addComposableSurface {
+//                ScrollArea(Modifier.height(100.dp)) {
+//                    Column {
+//                        repeat(20) {
+//                            Text("Hello World $it")
+//                        }
+//                    }
+//                }
+//            }
             addComposableSurface {
-                var x by remember { mutableStateOf(0.dp) }
-                var y by remember { mutableStateOf(0.dp) }
                 var buttonText by remember { mutableStateOf(1) }
                 Box {
+                    var x by remember { mutableStateOf(0.dp) }
+                    var y by remember { mutableStateOf(0.dp) }
                     Column(
                         Modifier.margin(x, 0.dp, y, 0.dp)
                             .background(RectBackground(MdColor.GREY))
@@ -69,6 +80,7 @@ fun main() {
                                 }
                             })
                     ) {
+                        val lines = remember { ListTextLineProvider() }
                         Button(onClick = { buttonText += 1 }) {
                             Text("Counter: $buttonText")
                         }
@@ -90,26 +102,7 @@ fun main() {
                         }
 
                         var text by remember { mutableStateOf("Hello World") }
-//                        println("[${Time.frameCount}] (Main) Recomposed at text")
-//                        TextField(text, onValueChange = {
-//                            println("[${Time.frameCount}] (Main) onValueChange: $it")
-//                            text = it
-//                        })
-
                         TextField(text, onValueChange = { text = it }, modifier = Modifier.fillMaxWidth())
-//                        var selected by remember { mutableStateOf(0) }
-//                        val items = listOf("Item 1", "Item 2", "Item 3")
-//                        Popup(alignmentX = AlignmentX.Center, alignmentY = AlignmentY.Center) {
-//                            Button(onClick = { buttonText++ }) {
-//                                Text("Hello centered ${buttonText}")
-//                            }
-//                        }
-//                        Popup(relativeToParent = true, offset = Vec2f(0f, 10f)) {
-//                            Box(Modifier.background(RoundRectBackground(Color.BLACK.withAlpha(0.5f), 4.dp))) {
-//                                Text("Following parent")
-//                            }
-//                        }
-//                        ComboBox(selected, items, onItemSelected = { selected = it })
                     }
                 }
             }

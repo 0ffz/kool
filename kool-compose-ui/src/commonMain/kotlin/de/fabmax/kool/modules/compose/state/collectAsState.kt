@@ -11,6 +11,8 @@ import de.fabmax.kool.modules.ui2.MutableStateValue
 @Composable
 fun <T> MutableStateValue<T>.collectAsState(): State<T> {
     return produceState(this.value) {
-        onChange { old, new -> this.value = new }
+        val producer = this
+        producer.value = this@collectAsState.value // Emit initial state
+        onChange { old, new -> producer.value = new } // Subscribe to state changes
     }
 }
