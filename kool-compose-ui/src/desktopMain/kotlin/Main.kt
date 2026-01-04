@@ -24,7 +24,7 @@ import de.fabmax.kool.scene.defaultOrbitCamera
 import de.fabmax.kool.util.Color
 import de.fabmax.kool.util.MdColor
 import de.fabmax.kool.util.Time
-import me.dvyy.compose.minimal.modifier.Modifier
+import me.dvyy.compose.mini.modifier.Modifier
 
 //TODO delete, using for faster testing
 fun main() {

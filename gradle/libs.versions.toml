@@ -14,7 +14,7 @@ physx-jni = "2.7.1"
 physx-wasm = "2.7.1"
 box2d-jni = "1.0.0"
 box2d-wasm = "1.0.0"
-compose-minimal = "0.0.1"
+compose-mini = "0.0.1"
 
 # wgpu backend
 wgpu4k = "0.1.1"
@@ -51,7 +51,9 @@ physx-wasm = { group = "npm", name = "physx-js-webidl", version.ref = "physx-was
 box2d-jni = { group = "de.fabmax.box2d-jni", name = "box2d-jni", version.ref = "box2d-jni" }
 box2d-android = { group = "de.fabmax.box2d-jni", name = "box2d-jni-android", version.ref = "box2d-jni" }
 box2d-wasm = { group = "npm", name = "kool-box2d-wasm", version.ref = "box2d-wasm" }
-compose-minimal-runtime = { group = "me.dvyy.compose.minimal", name = "runtime", version.ref = "compose-minimal"}
+compose-mini-runtime = { group = "me.dvyy.compose.mini", name = "runtime", version.ref = "compose-mini"}
+compose-mini-modifier = { group = "me.dvyy.compose.mini", name = "modifier", version.ref = "compose-mini" }
+compose-mini-modifier-composed = { group = "me.dvyy.compose.mini", name = "modifier-composed", version.ref = "compose-mini"}
 # wgpu backend
 wgpu4k = { module = "io.ygdrasil:wgpu4k", version.ref = "wgpu4k" }
 webgpu-descriptors = { module = "io.ygdrasil:webgpu-ktypes-descriptors", version.ref = "webgpu-ktypes" }

@@ -12,9 +12,9 @@ import de.fabmax.kool.modules.ui2.UiNode
 import de.fabmax.kool.modules.ui2.UiSurface
 import de.fabmax.kool.modules.ui2.dp
 import de.fabmax.kool.pipeline.RenderPass
-import me.dvyy.compose.minimal.modifier.Modifier
-import me.dvyy.compose.minimal.runtime.layers.Content
-import me.dvyy.compose.minimal.runtime.layers.rememberComposeSceneLayer
+import me.dvyy.compose.mini.modifier.Modifier
+import me.dvyy.compose.mini.runtime.layers.Content
+import me.dvyy.compose.mini.runtime.layers.rememberComposeSceneLayer
 
 @Composable
 private fun Popup(

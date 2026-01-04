@@ -7,7 +7,7 @@ import de.fabmax.kool.modules.compose.composables.rendering.TextStyle
 import de.fabmax.kool.modules.ui2.*
 import de.fabmax.kool.util.Time
 import kotlinx.coroutines.launch
-import me.dvyy.compose.minimal.runtime.MinimalComposition
+import me.dvyy.compose.mini.runtime.MinimalComposition
 import kotlin.time.ExperimentalTime
 
 /**
@@ -27,7 +27,7 @@ class UiSurfaceComposition(
 
     init {
         surface.parentScene.coroutineScope.launch {
-            while(true) {
+            while (true) {
                 Time.frameClock.withFrameNanos {
                     clock.sendFrame(it)
                 }

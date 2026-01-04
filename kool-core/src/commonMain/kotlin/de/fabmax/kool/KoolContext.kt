@@ -13,7 +13,7 @@ import de.fabmax.kool.util.BufferedList
 import de.fabmax.kool.util.KoolDispatchers
 import de.fabmax.kool.util.Time
 import kotlinx.atomicfu.atomic
-import me.dvyy.compose.minimal.runtime.nanoTime
+import me.dvyy.compose.mini.runtime.nanoTime
 
 /**
  * @author fabmax

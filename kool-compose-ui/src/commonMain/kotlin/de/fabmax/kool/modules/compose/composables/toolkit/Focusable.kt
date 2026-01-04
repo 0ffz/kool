@@ -8,7 +8,7 @@ import de.fabmax.kool.modules.compose.composables.Layout
 import de.fabmax.kool.modules.ui2.*
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import me.dvyy.compose.minimal.modifier.Modifier
+import me.dvyy.compose.mini.modifier.Modifier
 
 @Composable
 fun rememberFocusRequester(): FocusRequester {

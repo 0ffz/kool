@@ -7,7 +7,7 @@ import de.fabmax.kool.modules.compose.composables.Layout
 import de.fabmax.kool.modules.compose.modifiers.dragListener
 import de.fabmax.kool.modules.compose.modifiers.edit
 import de.fabmax.kool.modules.ui2.*
-import me.dvyy.compose.minimal.modifier.Modifier
+import me.dvyy.compose.mini.modifier.Modifier
 
 @Composable
 fun Slider(

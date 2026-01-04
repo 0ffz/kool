@@ -14,9 +14,9 @@ kotlin {
         commonMain.dependencies {
             api(libs.kotlin.coroutines)
             api(compose.runtime)
-            implementation("me.dvyy.compose.minimal:runtime")
-            implementation("me.dvyy.compose.minimal:modifier")
-            implementation("me.dvyy.compose.minimal:modifier-composed")
+            implementation(libs.compose.mini.runtime)
+            implementation(libs.compose.mini.modifier)
+            implementation(libs.compose.mini.modifier.composed)
             implementation(project(":kool-core"))
         }
         commonTest.dependencies {

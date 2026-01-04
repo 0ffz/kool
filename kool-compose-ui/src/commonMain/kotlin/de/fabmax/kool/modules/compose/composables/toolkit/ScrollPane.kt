@@ -11,7 +11,7 @@ import de.fabmax.kool.modules.compose.modifiers.onWheelX
 import de.fabmax.kool.modules.compose.modifiers.onWheelY
 import de.fabmax.kool.modules.ui2.*
 import de.fabmax.kool.util.Color
-import me.dvyy.compose.minimal.modifier.Modifier
+import me.dvyy.compose.mini.modifier.Modifier
 
 @Composable
 fun rememberScrollState() = remember { ScrollState() }

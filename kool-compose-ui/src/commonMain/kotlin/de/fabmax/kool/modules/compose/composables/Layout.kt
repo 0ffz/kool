@@ -10,8 +10,8 @@ import de.fabmax.kool.modules.compose.UiNodeApplier
 import de.fabmax.kool.modules.compose.modifiers.UiModifierWrapper
 import de.fabmax.kool.modules.ui2.UiNode
 import de.fabmax.kool.modules.ui2.UiSurface
-import me.dvyy.compose.minimal.modifier.Modifier
-import me.dvyy.compose.minimal.modifier.materialize
+import me.dvyy.compose.mini.modifier.Modifier
+import me.dvyy.compose.mini.modifier.materialize
 
 /**
  * The main component for layout, it measures and positions zero or more children.

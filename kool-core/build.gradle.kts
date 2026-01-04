@@ -14,7 +14,7 @@ kotlin {
         commonMain.dependencies {
             api(libs.kotlin.coroutines)
             implementation(compose.runtime)
-            implementation(libs.compose.minimal.runtime)
+            implementation(libs.compose.mini.runtime)
             implementation(libs.kotlin.serialization.json)
             implementation(libs.kotlin.atomicfu)
         }

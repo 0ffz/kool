@@ -3,7 +3,7 @@ package de.fabmax.kool.modules.compose.modifiers
 import androidx.compose.runtime.Stable
 import de.fabmax.kool.modules.ui2.*
 import de.fabmax.kool.util.Color
-import me.dvyy.compose.minimal.modifier.Modifier
+import me.dvyy.compose.mini.modifier.Modifier
 
 @Stable
 fun Modifier.background(background: UiRenderer<UiNode>) = edit<UiModifier> { it.background(background) }

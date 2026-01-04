@@ -13,8 +13,8 @@ import de.fabmax.kool.modules.ui2.PointerEvent
 import de.fabmax.kool.modules.ui2.RectBackground
 import de.fabmax.kool.util.Color
 import de.fabmax.kool.util.Time
-import me.dvyy.compose.minimal.modifier.Modifier
-import me.dvyy.compose.minimal.modifier.composed
+import me.dvyy.compose.mini.modifier.Modifier
+import me.dvyy.compose.mini.modifier.composed
 
 /**
  * Calls [onClick] when this element is clicked, also adding a ripple effect.

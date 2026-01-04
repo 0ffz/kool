@@ -2,7 +2,7 @@ package de.fabmax.kool.modules.compose.modifiers
 
 import de.fabmax.kool.modules.compose.InternalKoolComposeAPI
 import de.fabmax.kool.modules.ui2.UiModifier
-import me.dvyy.compose.minimal.modifier.Modifier
+import me.dvyy.compose.mini.modifier.Modifier
 
 /**
  * A compose [Modifier] that applies changes to a Kool [UiModifier] when recomposed.
