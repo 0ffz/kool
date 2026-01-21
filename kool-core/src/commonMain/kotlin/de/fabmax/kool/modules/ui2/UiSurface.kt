@@ -649,7 +649,7 @@ open class UiSurface(
         }
     }
 
-    inner class MeshLayer(name: String) : Node(name) {
+    class MeshLayer(name: String) : Node(name) {
         private val msdfMeshes = mutableMapOf<MsdfFontData, TextMesh>()
         private val textMeshes = mutableMapOf<Font, TextMesh>()
         private val imageMeshes = mutableMapOf<Texture2d, ImageMeshes>()

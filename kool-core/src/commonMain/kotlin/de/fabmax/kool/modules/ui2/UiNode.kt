@@ -214,7 +214,6 @@ abstract class UiNode(parent: UiNode?, override val surface: UiSurface) : UiScop
     open fun render(ctx: KoolContext) {
         modifier.background?.renderUi(this)
         modifier.border?.renderUi(this)
-        modifier.onRender.forEach { render -> render(this) }
     }
 
     open fun measureContentSize(ctx: KoolContext) {

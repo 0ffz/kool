@@ -36,12 +36,13 @@ fun Modifier.clickable(
         animator.update(Time.deltaT)
         onClick(it)
     }.draw {
-        if (animator.isActive) getUiPrimitives(1).localCircle(
-            clickPos.x, clickPos.y,
-            animator.value * 128.dp.px,
-            Color.WHITE.withAlpha(0.7f - animator.value * 0.5f)
-        )
-    }.draw { if (isHovered) hoverBackground.renderUi(this) }
+        //TODO
+//        if (animator.isActive) getMeshLayer(1).uiPrimitives.localCircle(
+//            clickPos.x, clickPos.y,
+//            animator.value * 128.dp.px,
+//            Color.WHITE.withAlpha(0.7f - animator.value * 0.5f)
+//        )
+    }//.draw { if (isHovered) hoverBackground.renderUi(this) }
         .onEnter { isHovered = true }
         .onExit { isHovered = false }
 

@@ -5,11 +5,12 @@ import de.fabmax.kool.modules.compose.Colors
 import de.fabmax.kool.modules.compose.Sizes
 import de.fabmax.kool.modules.compose.composables.layout.Box
 import de.fabmax.kool.modules.compose.modifiers.alignX
-import de.fabmax.kool.modules.compose.modifiers.background
 import de.fabmax.kool.modules.compose.modifiers.clickable
+import de.fabmax.kool.modules.compose.modifiers.draw
 import de.fabmax.kool.modules.compose.modifiers.padding
 import de.fabmax.kool.modules.ui2.AlignmentX
 import de.fabmax.kool.modules.ui2.RoundRectBackground
+import de.fabmax.kool.modules.ui2.UiSurface
 import de.fabmax.kool.modules.ui2.dp
 import de.fabmax.kool.util.Color
 import me.dvyy.compose.mini.modifier.Modifier
@@ -19,7 +20,22 @@ fun Button(onClick: () -> Unit, modifier: Modifier = Modifier, content: @Composa
     val color = Colors.secondaryVariant
 
     Box(
-        modifier.background(RoundRectBackground(color, 4.dp))
+        modifier/*.size(100, 100)*/.draw { node ->
+            val cornerRadius = 4.dp
+            val c = cornerRadius.px
+
+            getMeshLayer(UiSurface.LAYER_BACKGROUND).uiPrimitives
+                .roundRect(
+                    node.x.toFloat(),
+                    node.y.toFloat(),
+                    node.width.toFloat(),
+                    node.height.toFloat(),
+                    c,
+                    node.clipBounds,
+                    color
+                )
+            (RoundRectBackground(color, 4.dp))
+        }
             .padding(horizontal = Sizes.gap, vertical = Sizes.smallGap)
             .clickable(RoundRectBackground(Color.WHITE.withAlpha(0.2f), 4.dp)) { onClick() }
     ) {

@@ -1,7 +1,7 @@
 package de.fabmax.kool.modules.compose.composables.rendering
 
 import androidx.compose.runtime.Composable
-import de.fabmax.kool.modules.compose.composables.Layout
+import de.fabmax.kool.modules.compose.composables.layout.Box
 import de.fabmax.kool.modules.compose.modifiers.edit
 import de.fabmax.kool.modules.compose.modifiers.optionalEdit
 import de.fabmax.kool.modules.ui2.*
@@ -18,8 +18,8 @@ fun Image(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
-    Layout(
-        ::ImageNode, modifier
+    Box(
+        modifier
             .edit<ImageModifier> { it.image(texture) }
             .optionalEdit<ImageModifier>(tint != null) { it.tint(tint!!).customShader }
             .optionalEdit<ImageModifier>(size != null) { it.imageSize(size!!) }

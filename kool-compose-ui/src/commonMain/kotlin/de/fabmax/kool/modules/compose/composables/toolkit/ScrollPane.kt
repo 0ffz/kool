@@ -6,7 +6,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import de.fabmax.kool.modules.compose.LocalUiSurface
 import de.fabmax.kool.modules.compose.ProvideZLayer
-import de.fabmax.kool.modules.compose.composables.Layout
 import de.fabmax.kool.modules.compose.composables.layout.Box
 import de.fabmax.kool.modules.compose.modifiers.*
 import de.fabmax.kool.modules.compose.state.collectAsState
@@ -64,10 +63,10 @@ fun ScrollPane(
 ) {
     val surface = LocalUiSurface.current
     val scrollState by rememberUpdatedState(scrollState)
-    val node = remember(surface) { ScrollPaneNode(null, surface) }
-    node.state = scrollState
+//    val node = remember(surface) { ScrollPaneNode(null, surface) }
+//    node.state = scrollState
 
-    Layout({ _, _ -> node }, modifier) {
+    Box(modifier) {
         content()
     }
 }
@@ -83,23 +82,23 @@ fun VerticalScrollbar(
     val contentHeight by state.contentHeightDp.collectAsState()
     scroll; viewHeight; contentHeight
     val surface = LocalUiSurface.current
-    val scrollBar = remember { ScrollbarNode(null, surface) }
+//    val scrollBar = remember { ScrollbarNode(null, surface) }
 
     ProvideZLayer(10) {
-        Layout({ _, _ -> scrollBar }, modifier.edit<ScrollbarModifier> { modifier ->
+        Box(modifier.edit<ScrollbarModifier> { modifier ->
             modifier
                 .relativeBarPos(state.relativeBarPosY)
                 .relativeBarLen(state.relativeBarLenY)
                 .orientation(ScrollbarOrientation.Vertical)
                 .width(8.dp)
-                .hoverListener(scrollBar)
-                .dragListener(scrollBar)
+//                .hoverListener(scrollBar)
+//                .dragListener(scrollBar)
                 .onChange {
                     state.scrollRelativeY(it)
                 }
             scrollbarColor?.let { modifier.colors(it) }
         }
-        )
+        ) {}
     }
 }
 
@@ -113,22 +112,22 @@ fun HorizontalScrollbar(
     state.viewWidthDp.collectAsState().value
     state.contentWidthDp.collectAsState().value
     val surface = LocalUiSurface.current
-    val scrollBar = remember { ScrollbarNode(null, surface) }
+//    val scrollBar = remember { ScrollbarNode(null, surface) }
 
     ProvideZLayer(10) {
-        Layout({ _, _ -> scrollBar }, modifier.edit<ScrollbarModifier> { modifier ->
+        Box(modifier.edit<ScrollbarModifier> { modifier ->
             modifier
                 .relativeBarPos(state.relativeBarPosX)
                 .relativeBarLen(state.relativeBarLenX)
                 .orientation(ScrollbarOrientation.Horizontal)
                 .height(8.dp)
-                .hoverListener(scrollBar)
-                .dragListener(scrollBar)
+//                .hoverListener(scrollBar)
+//                .dragListener(scrollBar)
                 .onChange {
                     state.scrollRelativeX(it)
                 }
             scrollbarColor?.let { modifier.colors(it) }
         }
-        )
+        ) {}
     }
 }

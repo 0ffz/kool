@@ -3,7 +3,9 @@ package de.fabmax.kool.modules.compose
 import androidx.compose.runtime.BroadcastFrameClock
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import de.fabmax.kool.modules.compose.composables.ComposeUiNode
 import de.fabmax.kool.modules.compose.composables.rendering.TextStyle
+import de.fabmax.kool.modules.compose.node.ComposeUiSurface
 import de.fabmax.kool.modules.ui2.*
 import de.fabmax.kool.util.Time
 import kotlinx.coroutines.launch
@@ -20,18 +22,16 @@ import kotlin.time.ExperimentalTime
  */
 @OptIn(ExperimentalTime::class)
 class UiSurfaceComposition(
-    val surface: UiSurface,
+    val surface: ComposeUiSurface,
+    val sizes: Sizes,
+    val colors: Colors,
 ) {
-    private val viewport: UiNode = surface.viewport
+    //    private val viewport: UiNode = surface.viewport
     private val clock = BroadcastFrameClock()
     private val contentCompat = SurfaceContentCompat()
 
     init {
-        surface.content = {
-            contentCompat.content(this)
-        }
-
-        surface.parentScene.coroutineScope.launch {
+        surface.scope.launch {
             while (true) {
                 Time.composeFrameClock.withFrameNanos {
                     clock.sendFrame(it)
@@ -40,18 +40,18 @@ class UiSurfaceComposition(
         }
     }
 
-    private val composition = MinimalComposition<UiNode>(
+    private val composition = MinimalComposition<ComposeUiNode>(
         onNodesChanged = {
             surface.triggerUpdate()
         },
-        coroutineContext = surface.parentScene.coroutineScope.coroutineContext + clock,
+        coroutineContext = surface.scope.coroutineContext + clock,
         wrapContent = { content ->
             CompositionLocalProvider(
                 LocalUiSurface provides surface,
-                LocalColors provides surface.colors,
-                LocalSizes provides surface.sizes,
+                LocalColors provides colors,
+                LocalSizes provides sizes,
                 LocalTextStyle provides TextStyle(),
-                LocalContentColor provides surface.colors.onBackground,
+                LocalContentColor provides colors.onBackground,
                 LocalSurfaceContentCompat provides contentCompat,
             ) {
                 content()
@@ -59,12 +59,13 @@ class UiSurfaceComposition(
 
         },
         createLayerNode = {
-            viewport.Box {
-                this.modifier.resetDefaults()
-                modifier.zLayer(UiSurface.LAYER_POPUP).size(Grow.Std, Grow.Std)
-            } as BoxNode
+            surface.addWindow(ComposeUiNode(surface))
+//            viewport.Box {
+//                this.modifier.resetDefaults()
+//                modifier.zLayer(UiSurface.LAYER_POPUP).size(Grow.Std, Grow.Std)
+//            } as BoxNode
         },
-        removeLayerNode = { viewport.mutChildren.remove(it) },
+        removeLayerNode = { surface.removeWindow(it) },
         applierForNode = { UiNodeApplier(it) },
     )
 

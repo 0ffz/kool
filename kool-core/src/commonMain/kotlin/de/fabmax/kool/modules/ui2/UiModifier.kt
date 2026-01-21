@@ -7,7 +7,7 @@ import de.fabmax.kool.math.Vec2f
 import de.fabmax.kool.util.Color
 import kotlin.reflect.KProperty
 
-open class UiModifier(val surface: UiSurface) {
+open class UiModifier(val surface: UiSurface?) {
     private val properties = mutableListOf<PropertyHolder<*>>()
 
     var width: Dimension by property(FitContent)
@@ -46,7 +46,6 @@ open class UiModifier(val surface: UiSurface) {
     val onDragStart: MutableList<(PointerEvent) -> Unit> by listProperty()
     val onDrag: MutableList<(PointerEvent) -> Unit> by listProperty()
     val onDragEnd: MutableList<(PointerEvent) -> Unit> by listProperty()
-    val onRender: MutableList<UiNode.() -> Unit> by listProperty()
 
     protected fun <T> property(defaultVal: T): PropertyHolder<T> {
         val holder = PropertyHolder { defaultVal }
@@ -55,7 +54,7 @@ open class UiModifier(val surface: UiSurface) {
     }
 
     protected fun <T> property(defaultVal: (UiSurface) -> T): PropertyHolder<T> {
-        val holder = PropertyHolder(defaultVal)
+        val holder = PropertyHolder({ defaultVal(it!!) })
         properties += holder
         return holder
     }
@@ -94,7 +93,7 @@ open class UiModifier(val surface: UiSurface) {
                 onDrag.isNotEmpty() ||
                 onDragEnd.isNotEmpty()
 
-    protected open inner class PropertyHolder<T>(private val defaultVal: (UiSurface) -> T) {
+    protected open inner class PropertyHolder<T>(private val defaultVal: (UiSurface?) -> T) {
         var field = defaultVal(surface)
 
         open fun resetDefault() { field = defaultVal(surface) }

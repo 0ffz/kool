@@ -61,8 +61,8 @@ fun Popup(
     if (!relativeToParent || positioned) Popup(layerOffset) {
         var uiNode: UiNode? by remember { mutableStateOf(null) }
         val surface = LocalUiSurface.current
-        val width = surface.viewport.widthPx - (uiNode?.widthPx ?: 0f)
-        val height = surface.viewport.heightPx - (uiNode?.heightPx ?: 0f)
+        val width = surface.maxWidth - (uiNode?.widthPx ?: 0f)
+        val height = surface.maxHeight - (uiNode?.heightPx ?: 0f)
         val start = (offset.x.dp + parentPosition.x.dp)
         val top = (offset.y.dp + parentPosition.y.dp)
         Box(

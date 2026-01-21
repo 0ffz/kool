@@ -27,3 +27,5 @@ include("kool-editor-model")
 include("kool-editor")
 include("kool-demo")
 include("kool-compose-ui")
+
+includeBuild("../compose-mini")

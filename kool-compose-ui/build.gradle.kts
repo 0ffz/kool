@@ -15,6 +15,7 @@ kotlin {
             api(libs.kotlin.coroutines)
             api(libs.compose.runtime)
             api(libs.compose.mini.modifier)
+            api(libs.compose.mini.layout)
             api(libs.compose.mini.modifier.composed)
             implementation(libs.compose.mini.runtime)
             implementation(project(":kool-core"))

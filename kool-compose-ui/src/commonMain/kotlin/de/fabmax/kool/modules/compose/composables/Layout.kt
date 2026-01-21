@@ -8,8 +8,7 @@ import de.fabmax.kool.modules.compose.LocalUiSurface
 import de.fabmax.kool.modules.compose.LocalZLayer
 import de.fabmax.kool.modules.compose.UiNodeApplier
 import de.fabmax.kool.modules.compose.modifiers.UiModifierWrapper
-import de.fabmax.kool.modules.ui2.UiNode
-import de.fabmax.kool.modules.ui2.UiSurface
+import me.dvyy.compose.mini.layout.MeasurePolicy
 import me.dvyy.compose.mini.modifier.Modifier
 import me.dvyy.compose.mini.modifier.materialize
 
@@ -18,8 +17,8 @@ import me.dvyy.compose.mini.modifier.materialize
  */
 @Composable
 @InternalKoolComposeAPI
-inline fun <T : UiNode> Layout(
-    noinline constructor: (parent: UiNode?, surface: UiSurface) -> T,
+inline fun Layout(
+    measurePolicy: MeasurePolicy,
     modifier: Modifier,
     content: @Composable () -> Unit = {},
 ) {
@@ -27,20 +26,19 @@ inline fun <T : UiNode> Layout(
     val zLayer = LocalZLayer.current
 
     val materializedModifier = currentComposer.materialize(modifier)
-    ComposeNode<UiNode, UiNodeApplier>(
-        factory = { constructor(null, surface).also { it.applyDefaults() } },
+    ComposeNode<ComposeUiNode, UiNodeApplier>(
+        factory = { ComposeUiNode(surface) },
         update = {
+            set(measurePolicy) { this.measurePolicy = it }
             set(materializedModifier) {
                 this.modifier.resetDefaults()
                 this.modifier.zLayer = zLayer
-                materializedModifier.foldOut(this.modifier) { modifier, uiModifier ->
+                it.foldOut(this.modifier) { modifier, uiModifier ->
                     if (modifier is UiModifierWrapper) modifier.applyTo(this.modifier)
                     uiModifier
                 }
             }
-            set(zLayer) {
-                this.modifier.zLayer = zLayer
-            }
+            set(zLayer) { this.modifier.zLayer = it }
         },
         content = content,
     )

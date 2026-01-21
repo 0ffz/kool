@@ -22,12 +22,26 @@ import de.fabmax.kool.pipeline.ClearColorFill
 import de.fabmax.kool.scene.Scene
 import de.fabmax.kool.util.MdColor
 import de.fabmax.kool.util.MsdfFont
+import kotlinx.coroutines.delay
 import me.dvyy.compose.mini.modifier.Modifier
+import kotlin.time.Duration.Companion.seconds
 
 class HelloComposableUI : DemoScene("Composable UI") {
+    @OptIn(ExperimentalKoolComposeAPI::class)
     override fun Scene.setupMainScene(ctx: KoolContext) {
         setupUiScene(ClearColorFill(Scene.DEFAULT_CLEAR_COLOR))
 
+        addComposableSurface {
+            var count by remember { mutableStateOf(0) }
+            Button(onClick = { }) { Text("Hello World $count") }
+            LaunchedEffect(Unit) {
+                while (true) {
+                    count++
+                    delay(1.seconds)
+                }
+            }
+        }
+        return
         @OptIn(ExperimentalKoolComposeAPI::class)
         addComposableSurface {
             FloatingWindow("Sample UI Elements", Vec2f(50f, 50f), layer = 300) {

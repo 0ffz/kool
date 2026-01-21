@@ -1,10 +1,12 @@
 package de.fabmax.kool.modules.compose.composables.toolkit
 
-import androidx.compose.runtime.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import de.fabmax.kool.input.KeyEvent
 import de.fabmax.kool.modules.compose.LocalUiSurface
-import de.fabmax.kool.modules.compose.composables.Layout
+import de.fabmax.kool.modules.compose.composables.layout.Box
 import de.fabmax.kool.modules.ui2.*
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -27,17 +29,17 @@ fun Focusable(
     val surface = LocalUiSurface.current
     val onFocusChanged by rememberUpdatedState(onFocusChange)
     val onKeyboardInput by rememberUpdatedState(onKeyboardInput)
-    val focusable = remember(surface) { FocusableComposeNode(null, surface) }
+//    val focusable = remember(surface) { FocusableComposeNode(null, surface) }
     // TODO bad pattern, these should be modifiers, avoiding too much refactoring for now.
-    focusable.onFocusChanged = onFocusChanged
-    focusable.onKeyEvent = onKeyboardInput
-    LaunchedEffect(focusable, focusRequester) {
-        focusRequester.request.collect {
-            surface.requestFocus(focusable)
-        }
-    }
+//    focusable.onFocusChanged = onFocusChanged
+//    focusable.onKeyEvent = onKeyboardInput
+//    LaunchedEffect(focusable, focusRequester) {
+//        focusRequester.request.collect {
+//            surface.requestFocus(focusable)
+//        }
+//    }
 
-    Layout({ _, _ -> focusable }, modifier) {
+    Box(modifier) {
         content()
     }
 }

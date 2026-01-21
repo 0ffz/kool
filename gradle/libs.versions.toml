@@ -56,6 +56,7 @@ box2d-wasm = { group = "npm", name = "kool-box2d-wasm", version.ref = "box2d-was
 compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose" }
 compose-mini-runtime = { group = "me.dvyy.compose.mini", name = "runtime", version.ref = "compose-mini"}
 compose-mini-modifier = { group = "me.dvyy.compose.mini", name = "modifier", version.ref = "compose-mini" }
+compose-mini-layout = { group = "me.dvyy.compose.mini", name = "layout", version.ref = "compose-mini" }
 compose-mini-modifier-composed = { group = "me.dvyy.compose.mini", name = "modifier-composed", version.ref = "compose-mini"}
 # wgpu backcend
 wgpu4k = { module = "io.ygdrasil:wgpu4k", version.ref = "wgpu4k" }
