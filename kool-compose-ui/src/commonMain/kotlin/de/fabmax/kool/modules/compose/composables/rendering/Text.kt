@@ -17,8 +17,6 @@ import de.fabmax.kool.util.Color
 import de.fabmax.kool.util.Font
 import de.fabmax.kool.util.MutableStructBufferView
 import de.fabmax.kool.util.set
-import me.dvyy.compose.mini.layout.MeasurePolicy
-import me.dvyy.compose.mini.layout.MeasureResult
 import me.dvyy.compose.mini.modifier.Modifier
 
 @PublishedApi
@@ -44,21 +42,26 @@ fun Text(
         this.text = text
         isYAxisUp = false
     }
-    val textMetrics = remember(font, text) { font.textDimensions(text) }
+    val textMetrics = remember(font, text) {
+        font.textDimensions(text)
+    }
     Layout(
-        MeasurePolicy { measurables, constraints ->
+        { measurables, constraints ->
 //            val measured = measurables.map { it.measure(constraints) }
-            MeasureResult(textMetrics.width.toInt(), textMetrics.height.toInt()) {
+            layout(textMetrics.width.toInt(), textMetrics.height.toInt()) {
             }
         },
         modifier
             .draw {
                 getMeshLayer(0).getTextBuilder(font).withColor(textColor) {
-//                    rotate(180f, Vec3f.Z_AXIS)
-                    translate(it.x.toFloat(), it.y.toFloat(), 0f)
-                    translate(0f, textMetrics.yBaseline, 0f)
-                    (this as MeshBuilder<UiTextVertexLayout>).vertexCustomizer = setBoundsTextVertexNoClip
-                    text(props)
+//                    this.clear()
+                    withTransform {
+                        translate(it.x.toFloat(), it.y.toFloat(), 0f)
+                        translate(0f, textMetrics.yBaseline, 0f)
+                        println(textMetrics.height)
+                        (this as MeshBuilder<UiTextVertexLayout>).vertexCustomizer = setBoundsTextVertexNoClip
+                        text(props)
+                    }
                 }
             }
 //            .text(text)

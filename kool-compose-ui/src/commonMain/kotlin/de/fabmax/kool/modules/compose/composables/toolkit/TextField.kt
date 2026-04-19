@@ -3,10 +3,7 @@ package de.fabmax.kool.modules.compose.composables.toolkit
 import androidx.compose.runtime.Composable
 import de.fabmax.kool.modules.compose.LocalSizes
 import de.fabmax.kool.modules.compose.LocalUiSurface
-import de.fabmax.kool.modules.compose.composables.Layout
 import de.fabmax.kool.util.Font
-import me.dvyy.compose.mini.layout.MeasurePolicy
-import me.dvyy.compose.mini.layout.MeasureResult
 import me.dvyy.compose.mini.modifier.Modifier
 
 @Composable
@@ -28,18 +25,14 @@ fun TextField(
 //        }
 //    }
 
-    Layout(
-        MeasurePolicy { measurables, constraints ->
-//            val measured = measurables.map { it.measure(constraints) }
-            MeasureResult(100, 50) {}
-        },
-        modifier
-//            .onClick { textFieldNode.onClick(it) }
-//            .hoverListener(textFieldNode)
-//            .dragListener(textFieldNode)
-//            .edit<TextFieldModifier> { it.onChange { onValueChange(it) } }
-//            .edit<TextFieldModifier> { it.text(value) }
-//            .edit<TextFieldModifier> { it.onEnterPressed { onSubmit(it) } }
-//            .edit<TextFieldModifier> { it.font(font) }
-    ) {}
+//    Layout(
+//        modifier
+////            .onClick { textFieldNode.onClick(it) }
+////            .hoverListener(textFieldNode)
+////            .dragListener(textFieldNode)
+////            .edit<TextFieldModifier> { it.onChange { onValueChange(it) } }
+////            .edit<TextFieldModifier> { it.text(value) }
+////            .edit<TextFieldModifier> { it.onEnterPressed { onSubmit(it) } }
+////            .edit<TextFieldModifier> { it.font(font) }
+//    ) {}
 }

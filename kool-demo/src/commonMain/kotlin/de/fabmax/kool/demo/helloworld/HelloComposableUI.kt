@@ -23,6 +23,7 @@ import de.fabmax.kool.scene.Scene
 import de.fabmax.kool.util.MdColor
 import de.fabmax.kool.util.MsdfFont
 import kotlinx.coroutines.delay
+import me.dvyy.compose.mini.layout.jetpack.Arrangement
 import me.dvyy.compose.mini.modifier.Modifier
 import kotlin.time.Duration.Companion.seconds
 
@@ -33,7 +34,11 @@ class HelloComposableUI : DemoScene("Composable UI") {
 
         addComposableSurface {
             var count by remember { mutableStateOf(0) }
-            Button(onClick = { }) { Text("Hello World $count") }
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp.value.toInt())) {
+                repeat(count) {
+                    Button(onClick = { }) { Text("Hello World $it") }
+                }
+            }
             LaunchedEffect(Unit) {
                 while (true) {
                     count++

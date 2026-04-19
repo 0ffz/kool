@@ -6,7 +6,6 @@ import de.fabmax.kool.modules.ui2.UiSurface.MeshLayer
 import de.fabmax.kool.scene.Node
 import de.fabmax.kool.scene.Scene
 import de.fabmax.kool.util.SortedMap
-import me.dvyy.compose.mini.layout.jetpack.Constraints
 
 class ComposeUiSurface(
     scene: Scene,
@@ -59,10 +58,11 @@ class ComposeUiSurface(
             it.clear()
             removeNode(it)
         }
-        val placeables = windows.map {
-            it.measure(Constraints(maxWidth = maxWidth.toInt(), maxHeight = maxHeight.toInt()))
-        }
-        placeables.forEach { it.placeAt(0, 0) }
+        windows.forEach { it.measureAndPlace() }
+//        val placeables = windows.map {
+//            it.measure(Constraints(maxWidth = maxWidth.toInt(), maxHeight = maxHeight.toInt()))
+//        }
+//        placeables.forEach { it.placeAt(0, 0) }
         windows.forEach {
             it.render()
         }
