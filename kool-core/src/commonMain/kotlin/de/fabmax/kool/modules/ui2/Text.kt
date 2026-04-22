@@ -43,13 +43,13 @@ fun <T: TextModifier> T.clipToBounds(enabled: Boolean): T { this.clipToBounds = 
  * the other y text-alignment and padding properties are ignored. Currently, baseline margin only works for
  * non-rotated text.
  */
-fun <T: TextModifier> T.baselineMargin(bottom: Dp? = null, top: Dp? = null): T {
+fun <T : TextModifier> T.baselineMargin(bottom: Dp? = null, top: Dp? = null): T {
     baselineBottomMargin = bottom
     baselineTopMargin = top
     return this
 }
 
-fun <T: TextModifier> T.textAlign(alignX: AlignmentX = textAlignX, alignY: AlignmentY = textAlignY): T {
+fun <T : TextModifier> T.textAlign(alignX: AlignmentX = textAlignX, alignY: AlignmentY = textAlignY): T {
     textAlignX = alignX
     textAlignY = alignY
     return this
@@ -92,7 +92,7 @@ open class TextNode(parent: UiNode?, surface: UiSurface) : UiNode(parent, surfac
         if (modifier.isWrapText && modifier.width != FitContent) {
             val availableWidth = innerWidthPxState.use()
             if (availableWidth > 0f && availableWidth < textMetrics.width) {
-                renderTxt = wrapText(modifier.text, modifier.font, availableWidth)
+                renderTxt = wrapText(modifier.text, modifier.font, availableWidth, textProps.enforceSameWidthDigits)
                 textCache.getTextMetrics(renderTxt, modifier.font)
             }
         } else if (modifier.isWrapText && modifier.width == FitContent) {
@@ -178,24 +178,28 @@ open class TextNode(parent: UiNode?, surface: UiSurface) : UiNode(parent, surfac
                 textBounds.z = inMetrics.width
                 textBounds.w = inMetrics.height
             }
+
             90f -> {
                 textBounds.x = inMetrics.height - inMetrics.yBaseline
                 textBounds.y = 0f
                 textBounds.z = inMetrics.height
                 textBounds.w = inMetrics.width
             }
+
             180f -> {
                 textBounds.x = inMetrics.width
                 textBounds.y = inMetrics.height - inMetrics.yBaseline
                 textBounds.z = inMetrics.width
                 textBounds.w = inMetrics.height
             }
+
             270f -> {
                 textBounds.x = inMetrics.yBaseline
                 textBounds.y = inMetrics.width
                 textBounds.z = inMetrics.height
                 textBounds.w = inMetrics.width
             }
+
             else -> {
                 isOddRotation = true
                 val a = MutableVec2f(0f, inMetrics.height).rotate(rotation.deg)
@@ -215,60 +219,67 @@ open class TextNode(parent: UiNode?, surface: UiSurface) : UiNode(parent, surfac
         }
     }
 
-    private fun wrapText(text: String, font: Font, availableWidthPx: Float): String {
-        val wrappedTxt = StringBuilder()
-        var lineWidth = 0f
-        var lineStartIdx = 0
-        var lastLineBreakIdx = 0
-        var lastFallbackLineBreakIdx = 0
-        for (i in text.indices) {
-            val c = text[i]
-            if (c.isWhitespace()) {
-                lastLineBreakIdx = i
-            } else if (!c.isLetterOrDigit() || (c.isLowerCase() && text.getOrNull(i+1)?.isUpperCase() == true)) {
-                lastFallbackLineBreakIdx = i+1
+    companion object {
+        fun wrapText(
+            text: String,
+            font: Font,
+            availableWidthPx: Float,
+            enforceSameWidthDigits: Boolean,
+        ): String {
+            val wrappedTxt = StringBuilder()
+            var lineWidth = 0f
+            var lineStartIdx = 0
+            var lastLineBreakIdx = 0
+            var lastFallbackLineBreakIdx = 0
+            for (i in text.indices) {
+                val c = text[i]
+                if (c.isWhitespace()) {
+                    lastLineBreakIdx = i
+                } else if (!c.isLetterOrDigit() || (c.isLowerCase() && text.getOrNull(i + 1)?.isUpperCase() == true)) {
+                    lastFallbackLineBreakIdx = i + 1
+                }
+                val cw = font.charWidth(c, enforceSameWidthDigits)
+                if (i == lineStartIdx || lineWidth + cw <= availableWidthPx) {
+                    lineWidth += cw
+                } else {
+                    // insert line wrap
+                    if (wrappedTxt.isNotEmpty()) {
+                        wrappedTxt.append('\n')
+                    }
+                    lineStartIdx = when {
+                        lastLineBreakIdx > lineStartIdx -> {
+                            // break line at last space (and skip the whitespace)
+                            wrappedTxt.append(text.substring(lineStartIdx, lastLineBreakIdx))
+                            lastLineBreakIdx + 1
+                        }
+
+                        lastFallbackLineBreakIdx > lineStartIdx -> {
+                            // break line at last non-letter (and keep the split char)
+                            wrappedTxt.append(text.substring(lineStartIdx, lastFallbackLineBreakIdx))
+                            lastFallbackLineBreakIdx
+                        }
+
+                        else -> {
+                            // break line at current char index (mid-word)
+                            wrappedTxt.append(text.substring(lineStartIdx, i))
+                            i
+                        }
+                    }
+                    lineWidth = 0f
+                    for (j in lineStartIdx..i) {
+                        lineWidth += font.charWidth(text[j], enforceSameWidthDigits)
+                    }
+                }
             }
-            val cw = font.charWidth(c, textProps.enforceSameWidthDigits)
-            if (i == lineStartIdx || lineWidth + cw <= availableWidthPx) {
-                lineWidth += cw
-            } else {
-                // insert line wrap
+            if (lineStartIdx < text.length) {
                 if (wrappedTxt.isNotEmpty()) {
                     wrappedTxt.append('\n')
                 }
-                lineStartIdx = when {
-                    lastLineBreakIdx > lineStartIdx -> {
-                        // break line at last space (and skip the whitespace)
-                        wrappedTxt.append(text.substring(lineStartIdx, lastLineBreakIdx))
-                        lastLineBreakIdx + 1
-                    }
-                    lastFallbackLineBreakIdx > lineStartIdx -> {
-                        // break line at last non-letter (and keep the split char)
-                        wrappedTxt.append(text.substring(lineStartIdx, lastFallbackLineBreakIdx))
-                        lastFallbackLineBreakIdx
-                    }
-                    else -> {
-                        // break line at current char index (mid-word)
-                        wrappedTxt.append(text.substring(lineStartIdx, i))
-                        i
-                    }
-                }
-                lineWidth = 0f
-                for (j in lineStartIdx .. i) {
-                    lineWidth += font.charWidth(text[j], textProps.enforceSameWidthDigits)
-                }
+                wrappedTxt.append(text.substring(lineStartIdx))
             }
+            return wrappedTxt.toString()
         }
-        if (lineStartIdx < text.length) {
-            if (wrappedTxt.isNotEmpty()) {
-                wrappedTxt.append('\n')
-            }
-            wrappedTxt.append(text.substring(lineStartIdx))
-        }
-        return wrappedTxt.toString()
-    }
 
-    companion object {
         val factory: (UiNode, UiSurface) -> TextNode = { parent, surface -> TextNode(parent, surface) }
     }
 }

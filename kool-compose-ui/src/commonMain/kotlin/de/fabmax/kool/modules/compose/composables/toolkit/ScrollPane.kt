@@ -4,13 +4,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.unit.dp
 import de.fabmax.kool.modules.compose.LocalUiSurface
 import de.fabmax.kool.modules.compose.ProvideZLayer
 import de.fabmax.kool.modules.compose.composables.layout.Box
-import de.fabmax.kool.modules.compose.modifiers.*
+import de.fabmax.kool.modules.compose.modifiers.edit
+import de.fabmax.kool.modules.compose.modifiers.onWheelX
+import de.fabmax.kool.modules.compose.modifiers.onWheelY
 import de.fabmax.kool.modules.compose.state.collectAsState
 import de.fabmax.kool.modules.ui2.*
 import de.fabmax.kool.util.Color
+import me.dvyy.compose.mini.layout.modifiers.fillMaxHeight
+import me.dvyy.compose.mini.layout.modifiers.fillMaxWidth
+import me.dvyy.compose.mini.layout.modifiers.padding
 import me.dvyy.compose.mini.modifier.Modifier
 
 @Composable
@@ -47,11 +53,11 @@ fun ScrollArea(
         val bottomPadding = if (showHorizontalScrollbar) 8.dp else 0.dp
         if (showVerticalScrollbar)
             VerticalScrollbar(
-                Modifier.padding(bottom = bottomPadding).fillMaxHeight().alignX(AlignmentX.End),
+                Modifier.padding(bottom = bottomPadding).fillMaxHeight()/*.alignX(AlignmentX.End)*/,
                 state = scrollState
             )
         if (showHorizontalScrollbar)
-            HorizontalScrollbar(Modifier.fillMaxWidth().alignY(AlignmentY.Bottom), state = scrollState)
+            HorizontalScrollbar(Modifier.fillMaxWidth()/*.alignY(AlignmentY.Bottom)*/, state = scrollState)
     }
 }
 
@@ -90,7 +96,7 @@ fun VerticalScrollbar(
                 .relativeBarPos(state.relativeBarPosY)
                 .relativeBarLen(state.relativeBarLenY)
                 .orientation(ScrollbarOrientation.Vertical)
-                .width(8.dp)
+//                .width(8.dp) TODO
 //                .hoverListener(scrollBar)
 //                .dragListener(scrollBar)
                 .onChange {
@@ -120,7 +126,7 @@ fun HorizontalScrollbar(
                 .relativeBarPos(state.relativeBarPosX)
                 .relativeBarLen(state.relativeBarLenX)
                 .orientation(ScrollbarOrientation.Horizontal)
-                .height(8.dp)
+//                .height(8.dp) TODO
 //                .hoverListener(scrollBar)
 //                .dragListener(scrollBar)
                 .onChange {

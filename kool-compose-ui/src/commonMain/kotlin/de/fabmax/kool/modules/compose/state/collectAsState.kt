@@ -2,6 +2,7 @@ package de.fabmax.kool.modules.compose.state
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import de.fabmax.kool.modules.ui2.MutableStateValue
 
@@ -15,4 +16,10 @@ fun <T> MutableStateValue<T>.collectAsState(): State<T> {
         producer.value = this@collectAsState.value // Emit initial state
         onChange { old, new -> producer.value = new } // Subscribe to state changes
     }
+}
+
+fun <T> MutableStateValue<T>.asComposeState(): State<T> {
+    val state = mutableStateOf(value)// Emit initial state
+    onChange { _, new -> state.value = new } // Subscribe to state changes
+    return state
 }

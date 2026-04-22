@@ -5,9 +5,6 @@ import de.fabmax.kool.input.PointerInput
 import de.fabmax.kool.math.Vec2f
 import de.fabmax.kool.modules.compose.LocalUiSurface
 import de.fabmax.kool.modules.compose.ProvideZLayer
-import de.fabmax.kool.modules.compose.modifiers.align
-import de.fabmax.kool.modules.compose.modifiers.margin
-import de.fabmax.kool.modules.compose.modifiers.onMeasured
 import de.fabmax.kool.modules.compose.modifiers.onPositioned
 import de.fabmax.kool.modules.ui2.AlignmentX
 import de.fabmax.kool.modules.ui2.AlignmentY
@@ -65,17 +62,18 @@ fun Popup(
         val height = surface.maxHeight - (uiNode?.heightPx ?: 0f)
         val start = (offset.x.dp + parentPosition.x.dp)
         val top = (offset.y.dp + parentPosition.y.dp)
-        Box(
-            modifier.margin(
-                start = if (coerceToViewportBounds) start.coerceIn(0.dp..Dp.fromPx(width)) else start,
-                top = if (coerceToViewportBounds) top.coerceIn(0.dp, Dp.fromPx(height)) else top,
-                end = 0.dp,
-                bottom = 0.dp
-            ).align(alignmentX, alignmentY)
-                .onMeasured { uiNode = it }
-        ) {
-            content()
-        }
+        TODO("used to use margin")
+//        Box(
+//            modifier.margin(
+//                start = if (coerceToViewportBounds) start.coerceIn(0.dp..Dp.fromPx(width)) else start,
+//                top = if (coerceToViewportBounds) top.coerceIn(0.dp, Dp.fromPx(height)) else top,
+//                end = 0.dp,
+//                bottom = 0.dp
+//            ).align(alignmentX, alignmentY)
+//                .onMeasured { uiNode = it }
+//        ) {
+//            content()
+//        }
 
         DisposableEffect(uiNode, onDismissRequest) {
             var dismissedLastFrame = false

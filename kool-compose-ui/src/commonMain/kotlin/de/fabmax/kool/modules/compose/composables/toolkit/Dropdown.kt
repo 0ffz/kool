@@ -1,16 +1,16 @@
 package de.fabmax.kool.modules.compose.composables.toolkit
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.dp
 import de.fabmax.kool.modules.compose.LocalColors
 import de.fabmax.kool.modules.compose.LocalSizes
 import de.fabmax.kool.modules.compose.LocalTextStyle
 import de.fabmax.kool.modules.compose.composables.layout.Box
-import de.fabmax.kool.modules.compose.composables.layout.Column
-import de.fabmax.kool.modules.compose.composables.layout.Popup
-import de.fabmax.kool.modules.compose.composables.layout.Row
-import de.fabmax.kool.modules.compose.modifiers.*
-import de.fabmax.kool.modules.ui2.*
+import de.fabmax.kool.modules.compose.modifiers.background
+import de.fabmax.kool.modules.ui2.UiRenderer
+import de.fabmax.kool.modules.ui2.arrow
 import de.fabmax.kool.util.Color
+import me.dvyy.compose.mini.layout.modifiers.size
 import me.dvyy.compose.mini.modifier.Modifier
 
 @Composable
@@ -21,23 +21,24 @@ fun DropdownButton(
 ) {
     val sizes = LocalSizes.current
     val colors = LocalColors.current
-
-    Row(
-        modifier
-            .background(RoundRectBackground(colors.secondaryVariant, sizes.smallGap))
-            .clickable(RoundRectBackground(Color.WHITE.withAlpha(0.5f), sizes.smallGap)) { onClick() }) {
-        Box(Modifier.padding(start = sizes.smallGap, top = sizes.smallGap, bottom = sizes.smallGap)) {
-            content()
-        }
-        Box(
-            Modifier
-                .padding(sizes.smallGap)
-                .alignX(AlignmentX.End)
-                .fillMaxHeight()
-        ) {
-            Arrow(color = Color.WHITE, Modifier.alignY(AlignmentY.Center))
-        }
-    }
+    TODO("Reimplement")
+//
+//    Row(
+//        modifier
+//            .background(RoundRectBackground(colors.secondaryVariant, sizes.smallGap))
+//            .clickable(RoundRectBackground(Color.WHITE.withAlpha(0.5f), sizes.smallGap)) { onClick() }) {
+//        Box(Modifier.padding(start = sizes.smallGap, top = sizes.smallGap, bottom = sizes.smallGap)) {
+//            content()
+//        }
+//        Box(
+//            Modifier
+//                .padding(sizes.smallGap)
+//                .alignX(AlignmentX.End)
+//                .fillMaxHeight()
+//        ) {
+//            Arrow(color = Color.WHITE, Modifier.alignY(AlignmentY.Center))
+//        }
+//    }
 }
 
 @Composable
@@ -65,22 +66,22 @@ fun DropdownMenu(
     onDismissRequest: () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
-    val colors = LocalColors.current
-    val sizes = LocalSizes.current
-    val borderColor = colors.primaryVariantAlpha(0.5f)
-    if (expanded) Popup(
-        relativeToParent = true,
-        coerceToViewportBounds = true,
-        onDismissRequest = onDismissRequest,
-        modifier = modifier
-            .background(RoundRectBackground(colors.backgroundVariant, sizes.smallGap))
-            .border(RoundRectBorder(borderColor, sizes.smallGap, sizes.borderWidth))
-            .padding(sizes.smallGap)
-    ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            content()
-        }
-    }
+//    val colors = LocalColors.current
+//    val sizes = LocalSizes.current
+//    val borderColor = colors.primaryVariantAlpha(0.5f)
+//    if (expanded) Popup(
+//        relativeToParent = true,
+//        coerceToViewportBounds = true,
+//        onDismissRequest = onDismissRequest,
+//        modifier = modifier
+//            .background(RoundRectBackground(colors.backgroundVariant, sizes.smallGap))
+//            .border(RoundRectBorder(borderColor, sizes.smallGap, sizes.borderWidth))
+//            .padding(sizes.smallGap)
+//    ) {
+//        Column(modifier = Modifier.fillMaxSize()) {
+//            content()
+//        }
+//    }
 }
 
 @Composable
@@ -89,12 +90,12 @@ fun DropdownMenuItem(
     onClick: () -> Unit = {},
     text: @Composable () -> Unit,
 ) {
-    Box(
-        modifier
-            .padding(LocalSizes.current.smallGap)
-            .fillMaxWidth()
-            .clickable(RoundRectBackground(Color.WHITE.withAlpha(0.2f), LocalSizes.current.smallGap)) { onClick() }) {
-
-        text()
-    }
+//    Box(
+//        modifier
+//            .padding(LocalSizes.current.smallGap)
+//            .fillMaxWidth()
+//            .clickable(RoundRectBackground(Color.WHITE.withAlpha(0.2f), LocalSizes.current.smallGap)) { onClick() }) {
+//
+//        text()
+//    }
 }

@@ -1,49 +1,58 @@
 package de.fabmax.kool.modules.compose.modifiers
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import de.fabmax.kool.math.Easing
 import de.fabmax.kool.math.MutableVec2f
-import de.fabmax.kool.modules.compose.state.LaunchAnimation
-import de.fabmax.kool.modules.compose.state.collectAsState
-import de.fabmax.kool.modules.ui2.*
+import de.fabmax.kool.modules.compose.composables.DrawModifierNode
+import de.fabmax.kool.modules.compose.composables.DrawScope
+import de.fabmax.kool.modules.compose.state.asComposeState
+import de.fabmax.kool.modules.ui2.FloatAnimator
+import de.fabmax.kool.modules.ui2.PointerEvent
 import de.fabmax.kool.util.Color
 import de.fabmax.kool.util.Time
 import me.dvyy.compose.mini.modifier.Modifier
-import me.dvyy.compose.mini.modifier.composed
+import me.dvyy.compose.mini.modifier.ModifierNodeElement
 
 /**
  * Calls [onClick] when this element is clicked, also adding a ripple effect.
  */
 fun Modifier.clickable(
-    hoverBackground: UiRenderer<UiNode> = RectBackground(Color.WHITE.withAlpha(0.2f)),
+//    hoverBackground: UiRenderer<UiNode> = RectBackground(Color.WHITE.withAlpha(0.2f)),
     onClick: (PointerEvent) -> Unit,
-) = composed {
-    val animator = remember { FloatAnimator(0.3f, Easing.linear) }
-    val clickPos = remember { MutableVec2f() }
-    var isHovered by remember { mutableStateOf(false) }
-    val animatedRippleProgress by animator.animatable.collectAsState()
-    LaunchAnimation(animator)
+) = then(ClickableElement(onClick))
 
-    // Read values to let compose know to recreate modifiers when they change
-    animatedRippleProgress; isHovered
+private data class ClickableElement(val onClick: (PointerEvent) -> Unit) : ModifierNodeElement<ClickableNode>() {
+    override fun create(): ClickableNode = ClickableNode(onClick)
+    override fun update(node: ClickableNode) {
+        node.clickAction = onClick
+    }
+}
 
-    this.onClick {
-        clickPos.set(it.position)
-        animator.start(1f, startFrom = 0f)
-        animator.update(Time.deltaT)
-        onClick(it)
-    }.draw {
-        //TODO
-//        if (animator.isActive) getMeshLayer(1).uiPrimitives.localCircle(
-//            clickPos.x, clickPos.y,
-//            animator.value * 128.dp.px,
-//            Color.WHITE.withAlpha(0.7f - animator.value * 0.5f)
-//        )
-    }//.draw { if (isHovered) hoverBackground.renderUi(this) }
-        .onEnter { isHovered = true }
-        .onExit { isHovered = false }
+//TODO hover
+private class ClickableNode(
+    var clickAction: (PointerEvent) -> Unit,
+) : Modifier.Node(), ClickModifierNode, DrawModifierNode {
+    val clickAnimator = FloatAnimator(0.3f, Easing.linear)
+    val size by clickAnimator.animatable.asComposeState()
+    val clickPos = MutableVec2f()
 
+    override fun onClick(event: PointerEvent): Boolean {
+        clickAnimator.start(1f, startFrom = 0f)
+        clickPos.set(event.position)
+        clickAction(event)
+        return true
+    }
+
+    override fun DrawScope.draw() {
+        if (clickAnimator.isActive) {
+            clickAnimator.update(Time.deltaT)
+            surface.getMeshLayer(0).uiPrimitives.circle(
+                x + clickPos.x, y + clickPos.y,
+                size * 128,
+                clipBounds,
+                Color.WHITE.withAlpha(0.7f - size * 0.5f)
+            )
+        }
+        drawContent()
+    }
 }

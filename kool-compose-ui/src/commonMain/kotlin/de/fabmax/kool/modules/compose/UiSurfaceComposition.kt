@@ -41,9 +41,6 @@ class UiSurfaceComposition(
     }
 
     private val composition = MinimalComposition<ComposeUiNode>(
-        onNodesChanged = {
-            surface.triggerUpdate()
-        },
         coroutineContext = surface.scope.coroutineContext + clock,
         wrapContent = { content ->
             CompositionLocalProvider(
@@ -58,15 +55,9 @@ class UiSurfaceComposition(
             }
 
         },
-        createLayerNode = {
-            surface.addWindow(ComposeUiNode(surface))
-//            viewport.Box {
-//                this.modifier.resetDefaults()
-//                modifier.zLayer(UiSurface.LAYER_POPUP).size(Grow.Std, Grow.Std)
-//            } as BoxNode
-        },
+        createLayerNode = { surface.addWindow(ComposeUiNode(surface)) },
         removeLayerNode = { surface.removeWindow(it) },
-        applierForNode = { UiNodeApplier(it) },
+        applierForNode = { UiNodeApplier(it, onChanges = { surface.needsLayout() }) },
     )
 
     fun start(content: @Composable () -> Unit) {

@@ -1,9 +1,6 @@
 package de.fabmax.kool.modules.compose.modifiers
 
 import androidx.compose.runtime.Stable
-import de.fabmax.kool.modules.compose.composables.ComposeUiModifier
-import de.fabmax.kool.modules.compose.composables.ComposeUiNode
-import de.fabmax.kool.modules.compose.node.ComposeUiSurface
 import de.fabmax.kool.modules.ui2.*
 import de.fabmax.kool.util.Color
 import me.dvyy.compose.mini.modifier.Modifier
@@ -21,12 +18,10 @@ fun Modifier.onEnter(run: (PointerEvent) -> Unit) = edit<UiModifier> { it.onEnte
 
 fun Modifier.onExit(run: (PointerEvent) -> Unit) = edit<UiModifier> { it.onExit { run(it) } }
 
-fun Modifier.onClick(run: (PointerEvent) -> Unit) = edit<UiModifier> { it.onClick { run(it) } }
+//fun Modifier.onClick(run: (PointerEvent) -> Unit) = edit<UiModifier> { it.onClick { run(it) } }
 
 fun Modifier.onPositioned(run: (UiNode) -> Unit) = edit<UiModifier> { it.onPositioned { run(it) } }
 fun Modifier.onMeasured(run: (UiNode) -> Unit) = edit<UiModifier> { it.onMeasured { run(it) } }
-fun Modifier.draw(render: ComposeUiSurface.(node: ComposeUiNode) -> Unit) =
-    edit<ComposeUiModifier> { it.onRender.add(render) }
 
 @Stable
 fun Modifier.text(text: String) = edit<TextModifier> { it.text(text) }
