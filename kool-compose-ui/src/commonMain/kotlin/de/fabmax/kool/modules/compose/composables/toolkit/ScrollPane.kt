@@ -8,11 +8,8 @@ import androidx.compose.ui.unit.dp
 import de.fabmax.kool.modules.compose.LocalUiSurface
 import de.fabmax.kool.modules.compose.ProvideZLayer
 import de.fabmax.kool.modules.compose.composables.layout.Box
-import de.fabmax.kool.modules.compose.modifiers.edit
-import de.fabmax.kool.modules.compose.modifiers.onWheelX
-import de.fabmax.kool.modules.compose.modifiers.onWheelY
 import de.fabmax.kool.modules.compose.state.collectAsState
-import de.fabmax.kool.modules.ui2.*
+import de.fabmax.kool.modules.ui2.ScrollState
 import de.fabmax.kool.util.Color
 import me.dvyy.compose.mini.layout.modifiers.fillMaxHeight
 import me.dvyy.compose.mini.layout.modifiers.fillMaxWidth
@@ -35,15 +32,15 @@ fun ScrollArea(
 ) {
     Box(
         modifier
-            .onWheelX {
-                if (isScrollableHorizontal) {
-                    scrollState.scrollDpX(it.pointer.scroll.x * -20f)
-                }
-            }.onWheelY {
-                if (isScrollableVertical) {
-                    scrollState.scrollDpY(it.pointer.scroll.y * -50f)
-                }
-            }
+//            .onWheelX {
+//                if (isScrollableHorizontal) {
+//                    scrollState.scrollDpX(it.pointer.scroll.x * -20f)
+//                }
+//            }.onWheelY {
+//                if (isScrollableVertical) {
+//                    scrollState.scrollDpY(it.pointer.scroll.y * -50f)
+//                }
+//            }
     ) {
         val scrollState by rememberUpdatedState(scrollState)
         ScrollPane(scrollState, modifier = scrollPaneModifier) {
@@ -91,19 +88,18 @@ fun VerticalScrollbar(
 //    val scrollBar = remember { ScrollbarNode(null, surface) }
 
     ProvideZLayer(10) {
-        Box(modifier.edit<ScrollbarModifier> { modifier ->
+        Box(//modifier.edit<ScrollbarModifier> { modifier ->
             modifier
-                .relativeBarPos(state.relativeBarPosY)
-                .relativeBarLen(state.relativeBarLenY)
-                .orientation(ScrollbarOrientation.Vertical)
+//                .relativeBarPos(state.relativeBarPosY)
+//                .relativeBarLen(state.relativeBarLenY)
+//                .orientation(ScrollbarOrientation.Vertical)
 //                .width(8.dp) TODO
 //                .hoverListener(scrollBar)
 //                .dragListener(scrollBar)
-                .onChange {
-                    state.scrollRelativeY(it)
-                }
-            scrollbarColor?.let { modifier.colors(it) }
-        }
+//                .onChange {
+//                    state.scrollRelativeY(it)
+//                }
+//            scrollbarColor?.let { modifier.colors(it) }
         ) {}
     }
 }
@@ -121,19 +117,19 @@ fun HorizontalScrollbar(
 //    val scrollBar = remember { ScrollbarNode(null, surface) }
 
     ProvideZLayer(10) {
-        Box(modifier.edit<ScrollbarModifier> { modifier ->
-            modifier
-                .relativeBarPos(state.relativeBarPosX)
-                .relativeBarLen(state.relativeBarLenX)
-                .orientation(ScrollbarOrientation.Horizontal)
-//                .height(8.dp) TODO
-//                .hoverListener(scrollBar)
-//                .dragListener(scrollBar)
-                .onChange {
-                    state.scrollRelativeX(it)
-                }
-            scrollbarColor?.let { modifier.colors(it) }
-        }
+        Box(//modifier.edit<ScrollbarModifier> { modifier ->
+//            modifier
+//                .relativeBarPos(state.relativeBarPosX)
+//                .relativeBarLen(state.relativeBarLenX)
+//                .orientation(ScrollbarOrientation.Horizontal)
+////                .height(8.dp) TODO
+////                .hoverListener(scrollBar)
+////                .dragListener(scrollBar)
+//                .onChange {
+//                    state.scrollRelativeX(it)
+//                }
+//            scrollbarColor?.let { modifier.colors(it) }
+//        }
         ) {}
     }
 }

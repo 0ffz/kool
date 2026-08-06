@@ -3,8 +3,6 @@ package de.fabmax.kool.modules.compose.composables.toolkit
 import androidx.compose.runtime.Composable
 import de.fabmax.kool.modules.compose.LocalUiSurface
 import de.fabmax.kool.modules.compose.composables.layout.Box
-import de.fabmax.kool.modules.compose.modifiers.edit
-import de.fabmax.kool.modules.ui2.*
 import me.dvyy.compose.mini.modifier.Modifier
 
 @Composable
@@ -18,9 +16,9 @@ fun Slider(
 //    val slider = remember { SliderNode(null, surface) }
     Box(
         modifier = modifier
-            .edit<SliderModifier> { it.onChange { onValueChange(it) } }
-            .edit<SliderModifier> { it.value(value) }
-            .edit<SliderModifier> { it.minValue(range.start).maxValue(range.endInclusive) }
+//            .edit<SliderModifier> { it.onChange { onValueChange(it) } }
+//            .edit<SliderModifier> { it.value(value) }
+//            .edit<SliderModifier> { it.minValue(range.start).maxValue(range.endInclusive) }
 //            .dragListener(slider)
     ) {}
 }

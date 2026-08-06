@@ -6,10 +6,6 @@ import de.fabmax.kool.modules.compose.LocalColors
 import de.fabmax.kool.modules.compose.LocalSizes
 import de.fabmax.kool.modules.compose.composables.layout.Column
 import de.fabmax.kool.modules.compose.composables.layout.Popup
-import de.fabmax.kool.modules.compose.modifiers.background
-import de.fabmax.kool.modules.compose.modifiers.border
-import de.fabmax.kool.modules.ui2.RoundRectBackground
-import de.fabmax.kool.modules.ui2.RoundRectBorder
 import de.fabmax.kool.modules.ui2.dp
 import me.dvyy.compose.mini.modifier.Modifier
 
@@ -28,8 +24,8 @@ fun FloatingWindow(
         val sizes = LocalSizes.current
         Column(
             Modifier
-                .background(RoundRectBackground(colors.background, sizes.smallGap))
-                .border(RoundRectBorder(colors.backgroundVariant, sizes.smallGap, sizes.borderWidth))
+//                .drawBehind(RoundRectBackground(colors.background, sizes.smallGap))
+//                .border(RoundRectBorder(colors.backgroundVariant, sizes.smallGap, sizes.borderWidth))
         ) {
 //            Row(
 //                Modifier.fillMaxWidth()

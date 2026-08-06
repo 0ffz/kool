@@ -55,9 +55,10 @@ class UiSurfaceComposition(
             }
 
         },
-        createLayerNode = { surface.addWindow(ComposeUiNode(surface)) },
+        createLayerNode = { surface.addWindow(ComposeUiNode().also { it.surface = surface }) },
         removeLayerNode = { surface.removeWindow(it) },
         applierForNode = { UiNodeApplier(it, onChanges = { surface.needsLayout() }) },
+        onNewFrame = {}
     )
 
     fun start(content: @Composable () -> Unit) {

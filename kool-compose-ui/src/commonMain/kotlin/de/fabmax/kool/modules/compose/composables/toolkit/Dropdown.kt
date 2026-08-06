@@ -6,9 +6,7 @@ import de.fabmax.kool.modules.compose.LocalColors
 import de.fabmax.kool.modules.compose.LocalSizes
 import de.fabmax.kool.modules.compose.LocalTextStyle
 import de.fabmax.kool.modules.compose.composables.layout.Box
-import de.fabmax.kool.modules.compose.modifiers.background
-import de.fabmax.kool.modules.ui2.UiRenderer
-import de.fabmax.kool.modules.ui2.arrow
+import de.fabmax.kool.modules.compose.modifiers.drawBehind
 import de.fabmax.kool.util.Color
 import me.dvyy.compose.mini.layout.modifiers.size
 import me.dvyy.compose.mini.modifier.Modifier
@@ -46,16 +44,14 @@ fun Arrow(
     color: Color? = LocalTextStyle.current.color,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier.background(UiRenderer {
-        with(it) {
-            val cx = it.widthPx * 0.5f
-            val cy = it.heightPx * 0.5f
-            val d = it.sizes.smallGap.px * 2.5f
-            it.getPlainBuilder().configured(color = color) {
-                arrow(cx, cy, d, 90f)
-            }
-        }
-    }).size(16.dp, 16.dp)) {}
+    Box(modifier.drawBehind {
+        val cx = width * 0.5f
+        val cy = height * 0.5f
+//        val d = it.sizes.smallGap.px * 2.5f
+//        surface.getMeshLayer(0).plainBuilder.configured(color = color) {
+//            arrow(cx, cy, d, 90f)
+//        }
+    }.size(16.dp, 16.dp)) {}
 }
 
 

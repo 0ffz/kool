@@ -1,7 +1,6 @@
 package de.fabmax.kool.modules.compose.composables.rendering
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.constrain
@@ -11,9 +10,9 @@ import de.fabmax.kool.modules.compose.LocalSizes
 import de.fabmax.kool.modules.compose.LocalTextStyle
 import de.fabmax.kool.modules.compose.composables.Layout
 import de.fabmax.kool.modules.compose.modifiers.drawBehind
-import de.fabmax.kool.modules.compose.modifiers.edit
-import de.fabmax.kool.modules.ui2.*
+import de.fabmax.kool.modules.ui2.TextNode
 import de.fabmax.kool.modules.ui2.UiNode.Companion.NO_CLIP
+import de.fabmax.kool.modules.ui2.UiTextVertexLayout
 import de.fabmax.kool.scene.geometry.MeshBuilder
 import de.fabmax.kool.scene.geometry.TextProps
 import de.fabmax.kool.util.Color
@@ -100,25 +99,9 @@ fun Text(
                     text(measurePolicy.props)
                 }
             }
-        }//.background(RectBackground(Color.RED))
-//            .text(text)
-//            .textColor(textColor)
-//            .isWrapText(softWrap)
-//            .font(font)
+        }
     ) {}
 }
-
-@Stable
-private fun Modifier.font(font: Font) = edit<TextModifier> { it.font(font) }
-
-@Stable
-private fun Modifier.text(text: String) = edit<TextModifier> { it.text(text) }
-
-@Stable
-private fun Modifier.textColor(color: Color) = edit<TextModifier> { it.textColor(color) }
-
-@Stable
-private fun Modifier.isWrapText(enabled: Boolean) = edit<TextModifier> { it.isWrapText(enabled) }
 
 data class TextStyle(
     val color: Color? = null,

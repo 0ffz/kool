@@ -5,10 +5,8 @@ import de.fabmax.kool.input.PointerInput
 import de.fabmax.kool.math.Vec2f
 import de.fabmax.kool.modules.compose.LocalUiSurface
 import de.fabmax.kool.modules.compose.ProvideZLayer
-import de.fabmax.kool.modules.compose.modifiers.onPositioned
 import de.fabmax.kool.modules.ui2.AlignmentX
 import de.fabmax.kool.modules.ui2.AlignmentY
-import de.fabmax.kool.modules.ui2.Dp
 import de.fabmax.kool.modules.ui2.UiNode
 import de.fabmax.kool.modules.ui2.UiSurface
 import de.fabmax.kool.modules.ui2.dp
@@ -50,10 +48,11 @@ fun Popup(
     var positioned by remember { mutableStateOf(false) }
 
     // Empty box for getting the position of the parent node
-    if (relativeToParent && !positioned) Box(Modifier.onPositioned {
-        parentPosition = Vec2f(Dp.fromPx(it.leftPx).value, Dp.fromPx(it.bottomPx).value)
-        positioned = true
-    }) {}
+    //TODO
+//      if (relativeToParent && !positioned) Box(Modifier.onPositioned {
+//          parentPosition = Vec2f(Dp.fromPx(it.leftPx).value, Dp.fromPx(it.bottomPx).value)
+//          positioned = true
+//      }) {}
 
     if (!relativeToParent || positioned) Popup(layerOffset) {
         var uiNode: UiNode? by remember { mutableStateOf(null) }

@@ -7,8 +7,11 @@ import de.fabmax.kool.modules.compose.InternalKoolComposeAPI
 import de.fabmax.kool.modules.compose.LocalUiSurface
 import de.fabmax.kool.modules.compose.LocalZLayer
 import de.fabmax.kool.modules.compose.UiNodeApplier
+import de.fabmax.kool.modules.compose.composables.LayoutFunctions.NodeFactory
 import de.fabmax.kool.modules.compose.composables.LayoutFunctions.SetMeasurePolicy
 import de.fabmax.kool.modules.compose.composables.LayoutFunctions.SetModifier
+import de.fabmax.kool.modules.compose.composables.LayoutFunctions.SetSurface
+import de.fabmax.kool.modules.compose.node.ComposeUiSurface
 import me.dvyy.compose.mini.layout.jetpack.MeasurePolicy
 import me.dvyy.compose.mini.modifier.Modifier
 import me.dvyy.compose.mini.modifier.materialize
@@ -29,8 +32,9 @@ inline fun Layout(
 
     val materializedModifier = currentComposer.materialize(modifier)
     ComposeNode<ComposeUiNode, UiNodeApplier>(
-        factory = { ComposeUiNode(surface) },
+        factory = NodeFactory,
         update = {
+            set(surface, SetSurface)
             set(measurePolicy, SetMeasurePolicy)
             set(materializedModifier, SetModifier)
         },
@@ -41,9 +45,13 @@ inline fun Layout(
 // Constant values to avoid allocations of new lambda each call
 object LayoutFunctions {
     @JvmField
+    val SetSurface: ComposeUiNode.(ComposeUiSurface) -> Unit = { surface = it }
+    @JvmField
     val SetModifier: ComposeUiNode.(Modifier) -> Unit = { setModifier(it) }
 
     @JvmField
     val SetMeasurePolicy: ComposeUiNode.(MeasurePolicy) -> Unit = { measurePolicy = it }
 
+    @JvmField
+    val NodeFactory: () -> ComposeUiNode = { ComposeUiNode() }
 }

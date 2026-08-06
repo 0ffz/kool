@@ -3,8 +3,8 @@ package de.fabmax.kool.modules.compose.modifiers
 import androidx.compose.runtime.getValue
 import de.fabmax.kool.math.Easing
 import de.fabmax.kool.math.MutableVec2f
+import de.fabmax.kool.modules.compose.composables.ContentDrawScope
 import de.fabmax.kool.modules.compose.composables.DrawModifierNode
-import de.fabmax.kool.modules.compose.composables.DrawScope
 import de.fabmax.kool.modules.compose.state.asComposeState
 import de.fabmax.kool.modules.ui2.FloatAnimator
 import de.fabmax.kool.modules.ui2.PointerEvent
@@ -36,14 +36,16 @@ private class ClickableNode(
     val size by clickAnimator.animatable.asComposeState()
     val clickPos = MutableVec2f()
 
-    override fun onClick(event: PointerEvent): Boolean {
-        clickAnimator.start(1f, startFrom = 0f)
-        clickPos.set(event.position)
-        clickAction(event)
-        return true
+    override fun onEvent(event: PointerEvent) {
+        if (event.pointer.isAnyButtonClicked) {
+            clickAnimator.start(1f, startFrom = 0f)
+            clickPos.set(event.position)
+            clickAction(event)
+            event.isConsumed = true
+        }
     }
 
-    override fun DrawScope.draw() {
+    override fun ContentDrawScope.draw() {
         if (clickAnimator.isActive) {
             clickAnimator.update(Time.deltaT)
             surface.getMeshLayer(0).uiPrimitives.circle(

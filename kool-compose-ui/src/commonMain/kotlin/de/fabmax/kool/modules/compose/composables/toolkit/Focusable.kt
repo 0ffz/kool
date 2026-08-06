@@ -1,47 +1,43 @@
 package de.fabmax.kool.modules.compose.composables.toolkit
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
-import de.fabmax.kool.input.KeyEvent
-import de.fabmax.kool.modules.compose.LocalUiSurface
-import de.fabmax.kool.modules.compose.composables.layout.Box
-import de.fabmax.kool.modules.ui2.*
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import me.dvyy.compose.mini.modifier.Modifier
+import me.dvyy.compose.mini.modifier.ModifierNodeElement
 
 @Composable
 fun rememberFocusRequester(): FocusRequester {
     return remember { FocusRequester() }
 }
 
-@Composable
-fun Focusable(
-    focusRequester: FocusRequester = rememberFocusRequester(),
-    //TODO remove in favor of a modifier
-    onFocusChange: (Boolean) -> Unit = {},
-    onKeyboardInput: (KeyEvent) -> Unit = {},
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
-) {
-    val surface = LocalUiSurface.current
-    val onFocusChanged by rememberUpdatedState(onFocusChange)
-    val onKeyboardInput by rememberUpdatedState(onKeyboardInput)
-//    val focusable = remember(surface) { FocusableComposeNode(null, surface) }
-    // TODO bad pattern, these should be modifiers, avoiding too much refactoring for now.
-//    focusable.onFocusChanged = onFocusChanged
-//    focusable.onKeyEvent = onKeyboardInput
-//    LaunchedEffect(focusable, focusRequester) {
-//        focusRequester.request.collect {
-//            surface.requestFocus(focusable)
-//        }
-//    }
+interface Focusable {
+    fun onFocusChange(isFocused: Boolean)
+}
 
-    Box(modifier) {
-        content()
+@Stable
+fun Modifier.focusable(onFocusChange: (Boolean) -> Unit) = then(FocusableElement(onFocusChange))
+
+data class FocusableElement(
+    val onFocusChange: ((Boolean) -> Unit)? = null,
+) : ModifierNodeElement<FocusableNode>() {
+    override fun create(): FocusableNode = FocusableNode(onFocusChange)
+
+    override fun update(node: FocusableNode) {
+        node.onFocusChange = onFocusChange
     }
+}
+
+class FocusableNode(
+    var onFocusChange: ((Boolean) -> Unit)? = null,
+) : Focusable, Modifier.Node() {
+
+    override fun onFocusChange(isFocused: Boolean) {
+        onFocusChange?.invoke(isFocused)
+    }
+
 }
 
 class FocusRequester {
@@ -52,29 +48,5 @@ class FocusRequester {
 
     fun requestFocus() {
         request.tryEmit(Unit)
-    }
-}
-
-class FocusableComposeNode(
-    parent: UiNode?,
-    surface: UiSurface,
-) : UiNode(parent, surface), Focusable {
-    var onFocusChanged: ((Boolean) -> Unit)? = null
-    var onKeyEvent: ((KeyEvent) -> Unit)? = null
-    override val modifier: UiModifier = UiModifier(surface)
-    override val isFocused: MutableStateValue<Boolean> = MutableStateValue(false)
-
-    override fun onFocusGain() {
-        super.onFocusGain()
-        onFocusChanged?.invoke(true)
-    }
-
-    override fun onFocusLost() {
-        super.onFocusLost()
-        onFocusChanged?.invoke(false)
-    }
-
-    override fun onKeyEvent(keyEvent: KeyEvent) {
-        onKeyEvent?.invoke(keyEvent)
     }
 }

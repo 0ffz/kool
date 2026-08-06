@@ -4,14 +4,18 @@ import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.ui.unit.Constraints
 import de.fabmax.kool.KoolContext
 import de.fabmax.kool.input.InputStack
+import de.fabmax.kool.input.KeyEvent
 import de.fabmax.kool.input.PointerState
 import de.fabmax.kool.math.Vec3f
 import de.fabmax.kool.modules.compose.composables.ComposeUiNode
+import de.fabmax.kool.modules.compose.composables.toolkit.Focusable
 import de.fabmax.kool.modules.ui2.PointerEvent
 import de.fabmax.kool.modules.ui2.UiSurface.MeshLayer
 import de.fabmax.kool.scene.Node
 import de.fabmax.kool.scene.Scene
 import de.fabmax.kool.util.SortedMap
+import me.dvyy.compose.mini.layout.jetpack.MeasureScope
+import me.dvyy.compose.mini.layout.jetpack.Placeable
 
 class ComposeUiSurface(
     scene: Scene,
@@ -24,6 +28,8 @@ class ComposeUiSurface(
     val scope = scene.coroutineScope
     private var needsLayout = true
     private var needsDraw = true
+    var focused: Focusable? = null
+    var lastHovered: ComposeUiNode? = null
 
     fun needsLayout() {
         needsLayout = true
@@ -57,9 +63,13 @@ class ComposeUiSurface(
             override fun handlePointer(pointerState: PointerState, ctx: KoolContext) {
                 val pointer = pointerState.primaryPointer
                 val pointerEvent = PointerEvent(pointer, ctx)
-                if (pointer.isAnyButtonClicked) {
-                    println("Left clicked at $pointer")
-                    windows.any { it.processClick(pointerEvent) }
+                pointerEvent.isConsumed = false
+                windows.any { it.layoutDelegate.processPointerEvent(pointerEvent) }
+            }
+
+            override fun handleKeyEvents(keyEvents: List<KeyEvent>, ctx: KoolContext) {
+                keyEvents.forEach { event ->
+                    windows.any { it.layoutDelegate.processKeyEvent(event) }
                 }
             }
         }
@@ -100,6 +110,12 @@ class ComposeUiSurface(
         meshLayer.isUsed = true
         return meshLayer
     }
+    private val rootLayoutScope = object : MeasureScope, Placeable.PlacementScope {
+        override val x: Int = 0
+        override val y: Int = 0
+        override val density: Float get() = 1f
+        override val fontScale: Float get() = 1f
+    }
 
     fun update() {
         if (needsLayout) {
@@ -109,7 +125,12 @@ class ComposeUiSurface(
             // Measure and place all ui nodes, keeping track of states read during layout phase
             readStatesOnLayout.clear()
             Snapshot.observe(readObserver = readStatesOnLayoutObserver) {
-                windows.forEach { it.measureAndPlace(Constraints(maxWidth = maxWidth, maxHeight = maxHeight)) }
+                with(rootLayoutScope) {
+                    windows.forEach {
+                        it.layoutDelegate.measure(constraints = Constraints(maxWidth = maxWidth, maxHeight = maxHeight))
+                        it.layoutDelegate.placeAt(0, 0)
+                    }
+                }
             }
         }
         if (needsDraw) {
@@ -123,7 +144,7 @@ class ComposeUiSurface(
             readStatesOnDraw.clear()
             Snapshot.observe(readObserver = readStatesOnDrawObserver) {
                 windows.forEach {
-                    it.render()
+                    it.layoutDelegate.drawTo(this@ComposeUiSurface)
                 }
             }
 

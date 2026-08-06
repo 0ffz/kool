@@ -2,8 +2,6 @@ package de.fabmax.kool.modules.compose.composables.toolkit
 
 import androidx.compose.runtime.Composable
 import de.fabmax.kool.modules.compose.composables.layout.Box
-import de.fabmax.kool.modules.compose.modifiers.edit
-import de.fabmax.kool.modules.ui2.*
 import me.dvyy.compose.mini.modifier.Modifier
 
 @Composable
@@ -14,8 +12,8 @@ fun Switch(
 ) {
     Box(
         modifier
-            .edit<SwitchModifier> { it.onClick { onCheckedChange(!checked) } }
-            .edit<SwitchModifier> { it.toggleState(checked) }
+//            .edit<SwitchModifier> { it.onClick { onCheckedChange(!checked) } }
+//            .edit<SwitchModifier> { it.toggleState(checked) }
     ) {}
 }
 
@@ -27,8 +25,8 @@ fun Checkbox(
 ) {
     Box(
         modifier
-            .edit<CheckboxModifier> { it.onClick { onCheckedChange(!checked) } }
-            .edit<CheckboxModifier> { it.toggleState(checked) }
+//            .edit<CheckboxModifier> { it.onClick { onCheckedChange(!checked) } }
+//            .edit<CheckboxModifier> { it.toggleState(checked) }
     ) {}
 }
 
@@ -40,7 +38,7 @@ fun RadioButton(
 ) {
     Box(
         modifier
-            .edit<RadioButtonModifier> { it.onClick { onCheckedChange?.invoke(!checked) } }
-            .edit<RadioButtonModifier> { it.toggleState(checked) }
+//            .edit<RadioButtonModifier> { it.onClick { onCheckedChange?.invoke(!checked) } }
+//            .edit<RadioButtonModifier> { it.toggleState(checked) }
     ) {}
 }

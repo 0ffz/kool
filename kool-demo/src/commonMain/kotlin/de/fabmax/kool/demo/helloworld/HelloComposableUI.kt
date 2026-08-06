@@ -3,6 +3,7 @@ package de.fabmax.kool.demo.helloworld
 import androidx.compose.runtime.*
 import androidx.compose.ui.unit.dp
 import de.fabmax.kool.KoolContext
+import de.fabmax.kool.demo.DemoLoader
 import de.fabmax.kool.demo.DemoScene
 import de.fabmax.kool.input.KeyboardInput
 import de.fabmax.kool.modules.compose.ExperimentalKoolComposeAPI
@@ -12,6 +13,7 @@ import de.fabmax.kool.modules.compose.addComposableSurface
 import de.fabmax.kool.modules.compose.composables.layout.Box
 import de.fabmax.kool.modules.compose.composables.layout.Column
 import de.fabmax.kool.modules.compose.composables.layout.Row
+import de.fabmax.kool.modules.compose.composables.rendering.Image
 import de.fabmax.kool.modules.compose.composables.rendering.Text
 import de.fabmax.kool.modules.compose.composables.toolkit.Button
 import de.fabmax.kool.modules.compose.modifiers.drawBehind
@@ -26,6 +28,7 @@ import me.dvyy.compose.mini.layout.modifiers.*
 import me.dvyy.compose.mini.modifier.Modifier
 
 class HelloComposableUI : DemoScene("Composable UI") {
+    val exampleImage by texture2d("${DemoLoader.materialPath}/uv_checker_map.jpg")
     @OptIn(ExperimentalKoolComposeAPI::class)
     override fun Scene.setupMainScene(ctx: KoolContext) {
         var sizeY by mutableStateOf(100.dp)
@@ -57,6 +60,9 @@ class HelloComposableUI : DemoScene("Composable UI") {
                         println("Clicked, now $tasks")
                         tasks += "New task"
                     }) { Text("New task") }
+                    var text by remember { mutableStateOf("text") }
+//                    TextField(text, onValueChange = { text = it })
+                    Image(exampleImage) {}
                 }
             }
         }
@@ -88,6 +94,7 @@ class HelloComposableUI : DemoScene("Composable UI") {
                         }
                     }
                 }
+
             }
 //            Column(
 //                verticalArrangement = Arrangement.spacedBy(4.dp)

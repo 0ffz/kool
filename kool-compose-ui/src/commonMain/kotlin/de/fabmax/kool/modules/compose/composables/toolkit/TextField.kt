@@ -1,17 +1,18 @@
 package de.fabmax.kool.modules.compose.composables.toolkit
 
 import androidx.compose.runtime.Composable
-import de.fabmax.kool.modules.compose.LocalSizes
+import de.fabmax.kool.input.KeyboardInput
 import de.fabmax.kool.modules.compose.LocalUiSurface
-import de.fabmax.kool.util.Font
+import de.fabmax.kool.modules.compose.composables.rendering.Text
+import de.fabmax.kool.modules.compose.modifiers.onKeyEvent
 import me.dvyy.compose.mini.modifier.Modifier
 
 @Composable
 fun TextField(
     value: String,
     onValueChange: (String) -> Unit,
-    font: Font = LocalSizes.current.normalText,
     onSubmit: (String) -> Unit = {},
+//    font: Font = LocalSizes.current.normalText,
     modifier: Modifier = Modifier,
 ) {
     val surface = LocalUiSurface.current
@@ -24,7 +25,21 @@ fun TextField(
 //            }
 //        }
 //    }
+    Text(value, Modifier.onKeyEvent { event ->
+        var changed = value
+        if (event.isCharTyped) changed += event.typedChar
+        else if (event.isPressed) {
+            when (event.keyCode) {
+                KeyboardInput.KEY_BACKSPACE -> {
+                    changed = changed.dropLast(1)
+                }
 
+                else -> {}
+            }
+        }
+        onValueChange(changed)
+        true
+    })
 //    Layout(
 //        modifier
 ////            .onClick { textFieldNode.onClick(it) }

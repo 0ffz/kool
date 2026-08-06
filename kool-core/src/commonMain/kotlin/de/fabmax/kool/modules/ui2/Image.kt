@@ -191,6 +191,10 @@ class ImageNode(parent: UiNode?, surface: UiSurface) : UiNode(parent, surface), 
 
     companion object {
         val factory: (UiNode, UiSurface) -> ImageNode = { parent, surface -> ImageNode(parent, surface) }
+
+        fun configureImageMesh() {
+
+        }
     }
 }
 
